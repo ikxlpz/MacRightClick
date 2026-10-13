@@ -203,22 +203,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         guard let button = statusItem?.button else { return }
-        
-        // 采用 SF Symbols 原生图标渲染，带 macOS 版本兼容降级。
-        // contextualmenu 需要 macOS 14+，旧版本回退到 line.3.horizontal。
-        let symbolName: String
-        if #available(macOS 14.0, *) {
-            symbolName = "contextualmenu"
-        } else {
-            symbolName = "line.3.horizontal"
-        }
-        if let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: "开源右键助手") {
-            image.isTemplate = true // 跟随系统深/浅色菜单栏渲染
+
+        if let image = makeStatusBarImage() {
             button.image = image
-        }
-        // 兜底：若 SF Symbol 拉取失败（旧系统、缺资源、降级路径），
-        // 让 statusItem 至少有 1 个汉字宽度，避免变成 0 宽不可见。
-        if button.image == nil {
+            button.imagePosition = .imageOnly
+            button.imageScaling = .scaleNone
+        } else {
+            // 图标缺失时至少留一个字宽，避免状态栏项变成 0 宽。
             button.title = "右"
         }
         
@@ -226,6 +217,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
         menu.delegate = self
         rebuildStatusMenu(menu)
         statusItem?.menu = menu
+    }
+
+
+    /// 黑白 template。菜单栏会按浅色、深色和选中态重新着色，所以不能画彩色玻璃。
+    private func makeStatusBarImage() -> NSImage? {
+        if let url = Bundle.main.url(forResource: "MenuBarIcon", withExtension: "pdf"),
+           let image = NSImage(contentsOf: url) {
+            image.isTemplate = true
+            image.size = NSSize(width: 18, height: 18)
+            image.accessibilityDescription = "右键助手"
+            return image
+        }
+        if let image = NSImage(systemSymbolName: "cursorarrow", accessibilityDescription: "右键助手") {
+            image.isTemplate = true
+            return image
+        }
+        if let image = NSImage(systemSymbolName: "line.3.horizontal", accessibilityDescription: "右键助手") {
+            image.isTemplate = true
+            return image
+        }
+        return nil
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {

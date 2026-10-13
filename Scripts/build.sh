@@ -214,6 +214,11 @@ else
     echo "⚠️ [Build] 未找到 Resources/AppIcon.png 资源，跳过图标打包。"
 fi
 
+if [ -f "Resources/MenuBarIcon.pdf" ]; then
+    cp "Resources/MenuBarIcon.pdf" "$APP_BUNDLE/Contents/Resources/MenuBarIcon.pdf"
+    echo "🟢 [Build] 已注入菜单栏图标 MenuBarIcon.pdf"
+fi
+
 # 拷贝 Office 三件套最小骨架到 .app/Contents/Resources/Templates/
 if [ -d "Resources/Templates" ]; then
     mkdir -p "$APP_BUNDLE/Contents/Resources/Templates"
