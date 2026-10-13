@@ -288,7 +288,7 @@ struct DiagnosticsSettingsView: View {
         }
         let scope = snapshot.watchScope == .everywhere ? "所有目录" : "自定义目录"
         let cloud = snapshot.cloudCompatibilityEnabled ? "云盘兼容已开启" : "云盘兼容已关闭"
-        return "\(registration)；\(scope)，\(cloud)，实际监听 \(snapshot.observedPathCount) 个入口；File Provider 目录可从“服务”使用收藏/常用快捷动作，或通过“RightAction…”打开完整分类面板。"
+        return "\(registration)；\(scope)，\(cloud)，实际监听 \(snapshot.observedPathCount) 个入口。"
     }
 
     private func queueLevel(_ snapshot: RightClickMenuHealthSnapshot) -> SettingsStatusLevel {

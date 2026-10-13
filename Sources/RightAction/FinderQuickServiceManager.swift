@@ -1,5 +1,4 @@
 import AppKit
-import CoreServices
 import Foundation
 
 /// 把运行时依赖收口为一个解析入口，动态清单和服务授权始终使用同一份当前状态。
@@ -15,8 +14,7 @@ enum FinderQuickActionRuntime {
     }
 }
 
-/// 维护 ~/Library/Services 中的轻量快捷服务清单。
-/// 动作计算在主线程完成，文件 I/O 串行下沉；内容未变化时不会刷新系统服务。
+/// 不再向「服务」菜单注册快捷项，启动时清掉当前和改名前的动态服务。
 @MainActor
 final class FinderQuickServiceManager {
     static let shared = FinderQuickServiceManager()
@@ -26,17 +24,6 @@ final class FinderQuickServiceManager {
         qos: .utility
     )
     private let store: FinderQuickServiceBundleStore
-    private lazy var helperExecutableData: Data? = {
-        guard let resourceURL = Bundle.main.resourceURL else { return nil }
-        return try? Data(
-            contentsOf: resourceURL.appendingPathComponent(
-                FinderQuickServiceProtocol.executableName
-            )
-        )
-    }()
-    private var configObserver: NSObjectProtocol?
-    private var appAvailabilityObserver: NSObjectProtocol?
-    private var pendingRefresh: DispatchWorkItem?
 
     private init() {
         let libraryDirectory = FileManager.default.urls(
@@ -49,100 +36,24 @@ final class FinderQuickServiceManager {
     }
 
     func start() {
-        guard configObserver == nil, appAvailabilityObserver == nil else { return }
-        configObserver = DistributedNotificationCenter.default().addObserver(
-            forName: SystemReloader.configChangedNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor in
-                self?.scheduleRefresh()
-            }
-        }
-        appAvailabilityObserver = NotificationCenter.default.addObserver(
-            forName: InstalledAppRegistry.availabilityChangedNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor in
-                self?.scheduleRefresh()
-            }
-        }
-        scheduleRefresh(delay: 0)
-    }
-
-    func stop() {
-        pendingRefresh?.cancel()
-        pendingRefresh = nil
-        if let configObserver {
-            DistributedNotificationCenter.default().removeObserver(configObserver)
-            self.configObserver = nil
-        }
-        if let appAvailabilityObserver {
-            NotificationCenter.default.removeObserver(appAvailabilityObserver)
-            self.appAvailabilityObserver = nil
-        }
-    }
-
-    func scheduleRefresh(delay: TimeInterval = 0.3) {
-        pendingRefresh?.cancel()
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.refresh()
-        }
-        pendingRefresh = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
-    }
-
-    private func refresh() {
-        pendingRefresh = nil
-        let items = FinderQuickActionRuntime.currentItems()
-        let version = Bundle.main.object(
-            forInfoDictionaryKey: "CFBundleShortVersionString"
-        ) as? String ?? "1.0.0"
-        do {
-            let data = items.isEmpty
-                ? nil
-                : try FinderQuickServiceManifest.encodedData(items: items, appVersion: version)
-            guard let data else {
-                synchronize(nil, executableData: nil)
-                return
-            }
-            guard let helperExecutableData else {
-                AppLog.error("Finder 快捷服务 helper 缺失，已撤下失效直达项", category: .host)
-                synchronize(nil, executableData: nil)
-                return
-            }
-            synchronize(data, executableData: helperExecutableData)
-        } catch {
-            AppLog.error("生成 Finder 快捷服务失败：\(error.localizedDescription)", category: .host)
-        }
-    }
-
-    private func synchronize(_ manifestData: Data?, executableData: Data?) {
-        let store = self.store
+        let current = store.bundleURL
+        let legacy = store.servicesDirectoryURL.appendingPathComponent(
+            "RightClickAssistantQuickActions.service",
+            isDirectory: true
+        )
         ioQueue.async {
-            do {
-                let didChange = try store.synchronize(
-                    manifestData: manifestData,
-                    executableData: executableData
-                )
-                if manifestData != nil {
-                    let registrationStatus = LSRegisterURL(store.bundleURL as CFURL, true)
-                    if registrationStatus != noErr {
-                        AppLog.error(
-                            "注册 Finder 快捷服务失败，状态码：\(registrationStatus)",
-                            category: .host
-                        )
-                    }
-                }
-                guard didChange else { return }
-                DispatchQueue.main.async {
-                    NSUpdateDynamicServices()
-                    AppLog.info("Finder 快捷服务已刷新", category: .host)
-                }
-            } catch {
-                AppLog.error("写入 Finder 快捷服务失败：\(error.localizedDescription)", category: .host)
+            let fileManager = FileManager.default
+            var didRemove = false
+            for url in [current, legacy] where fileManager.fileExists(atPath: url.path) {
+                try? fileManager.removeItem(at: url)
+                didRemove = true
+            }
+            guard didRemove else { return }
+            DispatchQueue.main.async {
+                NSUpdateDynamicServices()
             }
         }
     }
+
+    func stop() {}
 }

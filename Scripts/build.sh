@@ -126,19 +126,6 @@ cat <<EOF > "$APP_BUNDLE/Contents/Info.plist"
     <true/>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
-    <key>NSServices</key>
-    <array>
-        <dict>
-            <key>NSMenuItem</key>
-            <dict><key>default</key><string>RightAction…</string></dict>
-            <key>NSMessage</key><string>performFinderService</string>
-            <key>NSPortName</key><string>RightAction</string>
-            <key>NSRequiredContext</key>
-            <dict><key>NSTextContent</key><string>FilePath</string></dict>
-            <key>NSUserData</key><string>guyue.service.openActionPalette</string>
-            <key>NSSendTypes</key><array><string>NSFilenamesPboardType</string></array>
-        </dict>
-    </array>
 </dict>
 </plist>
 EOF
