@@ -42,7 +42,7 @@ MacRightClick 是一款免费、开源的 macOS Finder 右键菜单助手。当�
 - **可靠动作队列**：Pending -> InFlight -> 终态确认；宿主异常退出后可回收未完成租约。
 - **显式更新检查**：只有点击“检查更新”才访问 GitHub Release API。
 - **Homebrew 外部工具**：区分独立安装与 Homebrew 管理来源，再安装、更新或修复 iTerm2、Warp、VS Code、Sublime Text、Cursor。
-- **Universal 2**：同时支持 Apple Silicon 与 Intel Mac。
+- **Apple Silicon**：本地构建只产出 arm64。
 
 ## 30 个动作
 

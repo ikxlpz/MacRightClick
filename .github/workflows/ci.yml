@@ -36,7 +36,7 @@ jobs:
           python3 -m py_compile Scripts/stress/run_stress.py Scripts/stress/run_reclaim_stress.py
 
   build:
-    name: Build Development Universal 2 Artifacts
+    name: Build Development arm64 Artifacts
     if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
     runs-on: macos-latest
     needs: test
@@ -55,14 +55,13 @@ jobs:
           test -x "$quick_service_helper"
           codesign --verify --strict --verbose=2 "$quick_service_helper"
           architectures="$(lipo -archs "$quick_service_helper")"
-          [[ "$architectures" == *arm64* ]]
-          [[ "$architectures" == *x86_64* ]]
+          [[ "$architectures" == "arm64" ]]
           hdiutil verify build/RightClickAssistant.dmg
 
       - name: Upload development artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: MacRightClick-Universal2-development
+          name: MacRightClick-arm64-development
           path: |
             build/RightClickAssistant.zip
             build/RightClickAssistant.dmg
@@ -117,8 +116,7 @@ jobs:
             build/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex/Contents/MacOS/RightClickAssistantExtension \
             build/RightClickAssistant.app/Contents/Resources/RightClickAssistantQuickService; do
             architectures="$(lipo -archs "$executable")"
-            [[ "$architectures" == *arm64* ]]
-            [[ "$architectures" == *x86_64* ]]
+            [[ "$architectures" == "arm64" ]]
           done
 
       - name: Prepare immutable and latest release assets
@@ -133,7 +131,7 @@ jobs:
           Distribution: Ad-hoc community build
           Developer ID signed: No
           Apple notarized: No
-          Architectures: arm64, x86_64
+          Architectures: arm64
           Source tag: v${VERSION}
           EOF
           cd build

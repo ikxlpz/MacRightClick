@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==============================================================================
-# 开源右键助手 (RightClickAssistant) 自动化编译与打包脚本 (支持 Universal 2)
+# 开源右键助手 (RightClickAssistant) 自动化编译与打包脚本 (仅 Apple Silicon / arm64)
 # ==============================================================================
 set -euo pipefail
 
@@ -320,54 +320,24 @@ case "$DISTRIBUTION_ROUTE" in
         ;;
 esac
 
-# 6. 编译宿主主程序 (arm64 与 x86_64)
+# 6. 只编译 Apple Silicon。Intel 需要时再加回 x86_64 + lipo。
 echo "🛠️ [Build] 编译宿主主程序 (arm64)..."
-swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $HOST_SOURCES -o "$BUILD_DIR/RightClickAssistant_arm64"
+swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $HOST_SOURCES -o "$APP_BUNDLE/Contents/MacOS/RightClickAssistant"
 
-echo "🛠️ [Build] 编译宿主主程序 (x86_64)..."
-swiftc $COMMON_FLAGS -target x86_64-apple-macosx13.0 $HOST_SOURCES -o "$BUILD_DIR/RightClickAssistant_x86_64"
-
-echo "🔗 [Build] 使用 lipo 创建宿主主程序的 Universal 胖二进制文件..."
-lipo -create -output "$APP_BUNDLE/Contents/MacOS/RightClickAssistant" "$BUILD_DIR/RightClickAssistant_arm64" "$BUILD_DIR/RightClickAssistant_x86_64"
-
-# 动态 .service 的微型转发 helper，不包含动作引擎或设置逻辑。
-echo "🛠️ [Build] 编译 Finder 快捷服务 helper (Universal)..."
+echo "🛠️ [Build] 编译 Finder 快捷服务 helper (arm64)..."
 QUICK_SERVICE_SOURCES="
     Sources/RightClickAssistantQuickService/main.swift \
     Sources/RightClickAssistant/Core/FinderQuickServiceProtocol.swift
 "
 swiftc -Onone -sdk "$SDK_PATH" -vfsoverlay "$BUILD_DIR/overlay.yaml" \
     -target arm64-apple-macosx13.0 $QUICK_SERVICE_SOURCES \
-    -o "$BUILD_DIR/RightClickAssistantQuickService_arm64"
-swiftc -Onone -sdk "$SDK_PATH" -vfsoverlay "$BUILD_DIR/overlay.yaml" \
-    -target x86_64-apple-macosx13.0 $QUICK_SERVICE_SOURCES \
-    -o "$BUILD_DIR/RightClickAssistantQuickService_x86_64"
-lipo -create \
-    -output "$APP_BUNDLE/Contents/Resources/RightClickAssistantQuickService" \
-    "$BUILD_DIR/RightClickAssistantQuickService_arm64" \
-    "$BUILD_DIR/RightClickAssistantQuickService_x86_64"
+    -o "$APP_BUNDLE/Contents/Resources/RightClickAssistantQuickService"
 
-
-# 7. 编译 Finder Sync 插件 (arm64 与 x86_64)
 echo "🛠️ [Build] 编译 Finder Sync 扩展插件 (arm64)..."
-swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $EXT_SOURCES -o "$BUILD_DIR/RightClickAssistantExtension_arm64"
+swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $EXT_SOURCES -o "$EXT_BUNDLE/Contents/MacOS/RightClickAssistantExtension"
 
-echo "🛠️ [Build] 编译 Finder Sync 扩展插件 (x86_64)..."
-swiftc $COMMON_FLAGS -target x86_64-apple-macosx13.0 $EXT_SOURCES -o "$BUILD_DIR/RightClickAssistantExtension_x86_64"
-
-echo "🔗 [Build] 使用 lipo 创建扩展插件的 Universal 胖二进制文件..."
-lipo -create -output "$EXT_BUNDLE/Contents/MacOS/RightClickAssistantExtension" "$BUILD_DIR/RightClickAssistantExtension_arm64" "$BUILD_DIR/RightClickAssistantExtension_x86_64"
-
-
-# 8. 编译 ActionVerifier 工具 (arm64 与 x86_64)
 echo "🛠️ [Build] 编译 ActionVerifier 校验程序 (arm64)..."
-swiftc -Onone -parse-as-library -sdk $SDK_PATH -vfsoverlay "$BUILD_DIR/overlay.yaml" -target arm64-apple-macosx13.0 Sources/ActionVerifier/ActionVerifier.swift -o "$BUILD_DIR/ActionVerifier_arm64"
-
-echo "🛠️ [Build] 编译 ActionVerifier 校验程序 (x86_64)..."
-swiftc -Onone -parse-as-library -sdk $SDK_PATH -vfsoverlay "$BUILD_DIR/overlay.yaml" -target x86_64-apple-macosx13.0 Sources/ActionVerifier/ActionVerifier.swift -o "$BUILD_DIR/ActionVerifier_x86_64"
-
-echo "🔗 [Build] 使用 lipo 创建 ActionVerifier 的 Universal 胖二进制文件..."
-lipo -create -output "ActionVerifier_bin" "$BUILD_DIR/ActionVerifier_arm64" "$BUILD_DIR/ActionVerifier_x86_64"
+swiftc -Onone -parse-as-library -sdk $SDK_PATH -vfsoverlay "$BUILD_DIR/overlay.yaml" -target arm64-apple-macosx13.0 Sources/ActionVerifier/ActionVerifier.swift -o "ActionVerifier_bin"
 
 
 # 9. 对生成的程序和扩展进行签名

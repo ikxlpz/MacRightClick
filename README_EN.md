@@ -42,7 +42,7 @@ A FinderSync extension renders menus and captures context, while the host app pe
 - **Reliable action queue** using Pending -> InFlight -> terminal acknowledgement and abandoned-lease recovery.
 - **Explicit update checks** that run only after the user clicks Check for Updates.
 - **Homebrew tool management** that distinguishes standalone apps from Homebrew-managed installs before installing, updating, or repairing iTerm2, Warp, VS Code, Sublime Text, and Cursor.
-- **Universal 2** support for Apple Silicon and Intel Macs.
+- **Apple Silicon:** local builds produce arm64 only.
 
 ## 30 Actions
 
