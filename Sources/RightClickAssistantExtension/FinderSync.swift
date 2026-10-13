@@ -344,11 +344,6 @@ class FinderSync: FIFinderSync {
         )
         item.tag = FinderSync.getTag(for: action.actionId, invocationKind: invocationKind)
         item.target = self
-
-        if let iconName = action.iconName {
-            item.image = NSImage(systemSymbolName: iconName, accessibilityDescription: nil)
-        }
-
         return item
     }
 
