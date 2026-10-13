@@ -9,6 +9,7 @@ public enum TerminalEditorType: String, Codable, CaseIterable, Sendable {
     case vscode = "vscode"
     case sublime = "sublime"
     case cursor = "cursor"
+    case otty = "otty"
     
     public var bundleIdentifier: String {
         switch self {
@@ -18,6 +19,7 @@ public enum TerminalEditorType: String, Codable, CaseIterable, Sendable {
         case .vscode: return "com.microsoft.VSCode"
         case .sublime: return "com.sublimetext.3" // 支持 Sublime Text 3/4
         case .cursor: return "com.todesktop.230313mptvbe7of" // Cursor's custom bundle ID
+        case .otty: return "io.appmakes.otty"
         }
     }
     
@@ -29,6 +31,7 @@ public enum TerminalEditorType: String, Codable, CaseIterable, Sendable {
         case .vscode: return "VS Code"
         case .sublime: return "Sublime"
         case .cursor: return "Cursor"
+        case .otty: return "Otty"
         }
     }
 }
@@ -66,6 +69,7 @@ public final class TerminalOpenAction: MenuAction, @unchecked Sendable {
         case .vscode: self.iconName = "chevron.left.forwardslash.chevron.right"
         case .sublime: self.iconName = "doc.plaintext"
         case .cursor: self.iconName = "sparkles"
+        case .otty: self.iconName = "terminal.fill"
         }
     }
     
