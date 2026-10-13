@@ -107,7 +107,7 @@ public final class TerminalOpenAction: MenuAction, @unchecked Sendable {
         
         
         // 异步拉起目标应用，避免 DispatchGroup.wait() 阻塞调用线程（尤其是主线程）导致 UI 卡死。
-        // NSWorkspace.open 回调在后台队列执行，HUD 展示内部已切换到主线程。
+        // NSWorkspace.open 回调在后台队列执行。成功时不弹 HUD，失败仍提示。
         NSWorkspace.shared.open([pathURL], withApplicationAt: appURL, configuration: configuration) { _, error in
             if let error = error {
                 print("[TerminalAction] 拉起 \(self.appType.displayName) 失败: \(error.localizedDescription)")
@@ -118,16 +118,11 @@ public final class TerminalOpenAction: MenuAction, @unchecked Sendable {
                 )
                 completion(.failed)
             } else {
-                SharedHUDManager.show(
-                    title: "拉起成功",
-                    content: "已在 \(self.appType.displayName) 中打开目录",
-                    isSuccess: true
-                )
                 completion(.succeeded)
             }
         }
         
-        // 立即返回，不等待异步结果。HUD 会在回调中展示成功/失败。
+        // 立即返回，不等待异步结果。
         // 调用方 ActionDispatcher 不依赖返回值做关键路径决策。
         return .accepted
     }

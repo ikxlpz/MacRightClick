@@ -29,7 +29,7 @@ public final class SharedHUDManager {
         // 1. 成功通知静默过滤。
         // 当用户在设置中关闭了“启用操作成功悬浮通知”后，成功的日常 HUD 提示保持静默；
         // 错误/失败 HUD 仍会显示，便于发现权限或系统拦截问题。
-        let isHUDEnabled = SharedStorageManager.shared.getBool(forKey: "enable_success_hud", defaultValue: true)
+        let isHUDEnabled = SharedStorageManager.shared.getBool(forKey: "enable_success_hud", defaultValue: false)
         if isSuccess && !isHUDEnabled {
             print("[SharedHUD] 成功提示静默过滤拦截: \(title) - \(content)")
             return

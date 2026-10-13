@@ -11,7 +11,7 @@ struct OverviewSettingsView: View {
 
     @State private var isLaunchEnabled = false
     @State private var isSilentLaunchEnabled = true
-    @State private var showsSuccessHUD = true
+    @State private var showsSuccessHUD = false
     @State private var updateCheckState: UpdateCheckState = .idle
 
     private var launchEnabledBinding: Binding<Bool> {
@@ -63,6 +63,7 @@ struct OverviewSettingsView: View {
                     set: saveSuccessHUD
                 ))
             }
+
 
             Section("关于") {
                 LabeledContent("版本") {
@@ -116,7 +117,7 @@ struct OverviewSettingsView: View {
         )
         showsSuccessHUD = SharedStorageManager.shared.getBool(
             forKey: "enable_success_hud",
-            defaultValue: true
+            defaultValue: false
         )
     }
 
