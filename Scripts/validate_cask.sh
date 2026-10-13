@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CASK_FILE="${1:-$ROOT_DIR/Casks/rightclickassistant.rb}"
+CASK_FILE="${1:-$ROOT_DIR/Casks/rightaction.rb}"
 
 if [[ ! -f "$CASK_FILE" ]]; then
     echo "❌ Cask 文件不存在: $CASK_FILE" >&2
@@ -23,8 +23,8 @@ if [[ "${CASK_VERIFY_DOWNLOAD:-1}" == "1" ]]; then
         exit 1
     }
 
-    DOWNLOAD_URL="https://github.com/guyue55/MacRightClick/releases/download/v${VERSION_VALUE}/RightClickAssistant-v${VERSION_VALUE}-macOS-Universal.dmg"
-    TEMP_DMG="$(mktemp -t rightclickassistant-cask).dmg"
+    DOWNLOAD_URL="https://github.com/ikxlpz/MacRightClick/releases/download/v${VERSION_VALUE}/RightAction-v${VERSION_VALUE}-macOS-Universal.dmg"
+    TEMP_DMG="$(mktemp -t rightaction-cask).dmg"
     trap 'rm -f "$TEMP_DMG"' EXIT
     echo "🌐 [Cask] 下载不可变制品并核对 SHA-256..."
     curl --fail --location --retry 3 --silent --show-error "$DOWNLOAD_URL" --output "$TEMP_DMG"
@@ -37,7 +37,7 @@ if [[ "${CASK_VERIFY_DOWNLOAD:-1}" == "1" ]]; then
 fi
 
 if command -v brew >/dev/null 2>&1; then
-    TAP_NAME="${HOMEBREW_TAP_NAME:-guyue55/macrightclick}"
+    TAP_NAME="${HOMEBREW_TAP_NAME:-ikxlpz/macrightclick}"
     TAP_REPO="$(brew --repo "$TAP_NAME" 2>/dev/null || true)"
 
     if [[ -n "$TAP_REPO" && "$CASK_FILE" == "$TAP_REPO/"* ]]; then
@@ -45,11 +45,11 @@ if command -v brew >/dev/null 2>&1; then
         brew style --cask "$CASK_FILE"
 
         echo "🍺 [Cask] 运行 brew audit..."
-        brew audit --cask --strict --online "$TAP_NAME/rightclickassistant"
+        brew audit --cask --strict --online "$TAP_NAME/rightaction"
     else
         echo "⚠️ [Cask] Homebrew 要求 style/audit 的 Cask 位于 tap 中。"
         echo "⚠️ [Cask] 当前路径不是 $TAP_NAME tap，已跳过 brew style/audit。"
-        echo "⚠️ [Cask] 可在发布后运行: brew tap $TAP_NAME https://github.com/guyue55/MacRightClick.git"
+        echo "⚠️ [Cask] 可在发布后运行: brew tap $TAP_NAME https://github.com/ikxlpz/MacRightClick.git"
     fi
 else
     echo "⚠️ [Cask] 未检测到 Homebrew，已跳过 brew style/audit。"

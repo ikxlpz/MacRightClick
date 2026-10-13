@@ -1,19 +1,19 @@
-# MacRightClick
+# RightAction
 
 [English](README_EN.md) | 简体中文
 
 <p align="center">
-  <img src="Resources/AppIcon.png" width="128" height="128" alt="MacRightClick 图标" />
+  <img src="Resources/AppIcon.png" width="128" height="128" alt="RightAction 图标" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/guyue55/MacRightClick/actions"><img src="https://github.com/guyue55/MacRightClick/workflows/MacRightClick%20CI/CD%20Build/badge.svg" alt="CI 状态" /></a>
+  <a href="https://github.com/ikxlpz/MacRightClick/actions"><img src="https://github.com/ikxlpz/MacRightClick/workflows/RightAction%20CI/CD%20Build/badge.svg" alt="CI 状态" /></a>
   <img src="https://img.shields.io/badge/macOS-13.0%2B-blue" alt="macOS 13.0+" />
   <img src="https://img.shields.io/badge/Swift-6.0-orange" alt="Swift 6.0" />
   <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License" />
 </p>
 
-MacRightClick 是一款免费、开源的 macOS Finder 右键菜单助手。当前源码注册 **30 个动作**，默认把已启用且适用于当前选中项的动作直接显示在一级菜单中；也可切换为分类子菜单。
+RightAction 是一款免费、开源的 macOS Finder 右键菜单助手。当前源码注册 **30 个动作**，默认把已启用且适用于当前选中项的动作直接显示在一级菜单中；也可切换为分类子菜单。
 
 项目由 FinderSync 扩展负责菜单与上下文采集，宿主 App 负责文件操作、交互与后台任务。它不包含广告、遥测或后台更新轮询。
 
@@ -95,24 +95,24 @@ flowchart LR
 
 | 格式 | 当前可下载制品 |
 | --- | --- |
-| DMG | [RightClickAssistant-v1.2.1-macOS-Universal.dmg](https://github.com/guyue55/MacRightClick/releases/download/v1.2.1/RightClickAssistant-v1.2.1-macOS-Universal.dmg) |
-| ZIP | [RightClickAssistant-v1.2.1-macOS-Universal.zip](https://github.com/guyue55/MacRightClick/releases/download/v1.2.1/RightClickAssistant-v1.2.1-macOS-Universal.zip) |
+| DMG | [RightAction-v1.2.1-macOS-Universal.dmg](https://github.com/ikxlpz/MacRightClick/releases/download/v1.2.1/RightAction-v1.2.1-macOS-Universal.dmg) |
+| ZIP | [RightAction-v1.2.1-macOS-Universal.zip](https://github.com/ikxlpz/MacRightClick/releases/download/v1.2.1/RightAction-v1.2.1-macOS-Universal.zip) |
 
-全部版本见 [GitHub Releases](https://github.com/guyue55/MacRightClick/releases)。
+全部版本见 [GitHub Releases](https://github.com/ikxlpz/MacRightClick/releases)。
 
 ### 更新与 Latest
 
 每个稳定标签会同时生成两类资产：
 
-- `RightClickAssistant-vX.Y.Z-macOS-Universal.*`：不可变的版本资产，用于 Homebrew、回滚和 SHA-256 校验。
-- `RightClickAssistant-Latest.*`：始终位于最新稳定 Release 的便利别名，用于手动下载或简单脚本。
+- `RightAction-vX.Y.Z-macOS-Universal.*`：不可变的版本资产，用于 Homebrew、回滚和 SHA-256 校验。
+- `RightAction-Latest.*`：始终位于最新稳定 Release 的便利别名，用于手动下载或简单脚本。
 
 Latest 固定入口：
 
 ```text
-https://github.com/guyue55/MacRightClick/releases/latest
-https://github.com/guyue55/MacRightClick/releases/latest/download/RightClickAssistant-Latest.dmg
-https://github.com/guyue55/MacRightClick/releases/latest/download/RightClickAssistant-Latest.zip
+https://github.com/ikxlpz/MacRightClick/releases/latest
+https://github.com/ikxlpz/MacRightClick/releases/latest/download/RightAction-Latest.dmg
+https://github.com/ikxlpz/MacRightClick/releases/latest/download/RightAction-Latest.zip
 ```
 
 > [!NOTE]
@@ -121,20 +121,20 @@ https://github.com/guyue55/MacRightClick/releases/latest/download/RightClickAssi
 ### Homebrew Cask
 
 ```bash
-brew tap guyue55/macrightclick https://github.com/guyue55/MacRightClick.git
-brew install --cask guyue55/macrightclick/rightclickassistant
+brew tap ikxlpz/macrightclick https://github.com/ikxlpz/MacRightClick.git
+brew install --cask ikxlpz/macrightclick/rightaction
 ```
 
 当前 Cask 固定到 v1.2.1 的不可变 URL，并校验真实 SHA-256。`brew upgrade` 只会在仓库中的 Cask 版本和哈希更新后升级，不会绕过版本元数据追随可变 Latest 文件。
 
-Homebrew 6.0 起，第三方 tap 必须经过显式信任。上面的完整限定名称只信任 `rightclickassistant` 这一项，不会扩大到整个 tap，也是新旧 Homebrew 均可使用的推荐安装方式。如果此前使用短名称安装并看到 `untrusted tap`，执行：
+Homebrew 6.0 起，第三方 tap 必须经过显式信任。上面的完整限定名称只信任 `rightaction` 这一项，不会扩大到整个 tap，也是新旧 Homebrew 均可使用的推荐安装方式。如果此前使用短名称安装并看到 `untrusted tap`，执行：
 
 ```bash
-brew trust --cask guyue55/macrightclick/rightclickassistant
-brew install --cask guyue55/macrightclick/rightclickassistant
+brew trust --cask ikxlpz/macrightclick/rightaction
+brew install --cask ikxlpz/macrightclick/rightaction
 ```
 
-`brew trust --cask` 仅适用于 Homebrew 6.0 及以上；无需使用权限范围更大的 `brew trust guyue55/macrightclick`。
+`brew trust --cask` 仅适用于 Homebrew 6.0 及以上；无需使用权限范围更大的 `brew trust ikxlpz/macrightclick`。
 
 > [!NOTE]
 > Homebrew 会校验下载包的 SHA-256 并安装 App，但不会为 App 补做 Developer ID 签名或 Apple 公证。首次打开时仍可能需要在“隐私与安全性”中手动允许。不建议使用 `--no-quarantine` 绕过这一次用户确认。
@@ -143,37 +143,37 @@ brew install --cask guyue55/macrightclick/rightclickassistant
 > 当前 v1.2.1 是 Ad-hoc 签名、未经 Apple 公证的社区构建。新机器通过 Homebrew 安装后，macOS 仍可能阻止首次启动。先尝试 Control 点击 App ->“打开”，或“系统设置 -> 隐私与安全性 -> 仍要打开”。如果确认 App 来自本仓库但系统仍然拦截，执行：
 
 ```bash
-sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightClickAssistant.app"
-open "/Applications/RightClickAssistant.app"
+sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightAction.app"
+open "/Applications/RightAction.app"
 ```
 
 `sudo` 会要求输入当前 macOS 管理员密码；终端输入密码时不会显示字符，这是正常现象。该命令只移除这个 App 的下载隔离属性，不会关闭 Gatekeeper，也不会为 App 增加签名或公证。
 
 ```bash
 brew update
-brew upgrade --cask guyue55/macrightclick/rightclickassistant
+brew upgrade --cask ikxlpz/macrightclick/rightaction
 ```
 
 > [!NOTE]
-> 从 v1.2.0 升级时，如果 `brew upgrade` 报出 `pluginkit -r guyue.RightClickAssistant.Extension`，这是旧版 Cask 已保存的卸载脚本错误，不是 v1.2.1 制品校验失败。仅需执行一次以下迁移；第一条命令只清除右键助手的旧 Homebrew 收据，第二条会用已校验的 v1.2.1 DMG 覆盖安装：
+> 从 v1.2.0 升级时，如果 `brew upgrade` 报出 `pluginkit -r guyue.RightClickAssistant.Extension`，这是旧版 Cask 已保存的卸载脚本错误，不是 v1.2.1 制品校验失败。仅需执行一次以下迁移；第一条命令只清除 RightAction 的旧 Homebrew 收据，第二条会用已校验的 v1.2.1 DMG 覆盖安装：
 >
 > ```bash
 > rm -rf "$(brew --caskroom)/rightclickassistant"
-> brew install --cask --force guyue55/macrightclick/rightclickassistant
+> brew install --cask --force ikxlpz/macrightclick/rightaction
 > ```
 
 普通卸载会保留设置和运行数据，但会移除动态快捷服务并刷新系统菜单：
 
 ```bash
-brew uninstall --cask guyue55/macrightclick/rightclickassistant
-brew untap guyue55/macrightclick
+brew uninstall --cask ikxlpz/macrightclick/rightaction
+brew untap ikxlpz/macrightclick
 ```
 
 需要同时删除设置、共享容器和失败动作数据时，使用完全卸载：
 
 ```bash
-brew uninstall --cask --zap rightclickassistant
-brew untap guyue55/macrightclick
+brew uninstall --cask --zap rightaction
+brew untap ikxlpz/macrightclick
 ```
 
 > [!WARNING]
@@ -182,13 +182,13 @@ brew untap guyue55/macrightclick
 已克隆仓库时，也可以把当前目录作为本地 tap：
 
 ```bash
-brew tap guyue55/macrightclick "$(pwd)"
-brew install --cask guyue55/macrightclick/rightclickassistant
+brew tap ikxlpz/macrightclick "$(pwd)"
+brew install --cask ikxlpz/macrightclick/rightaction
 ```
 
 ## 首次运行
 
-1. DMG 用户先将 `RightClickAssistant.app` 拖入 `/Applications`；ZIP 用户解压后手动移入该目录。Homebrew 会自动完成这一步。
+1. DMG 用户先将 `RightAction.app` 拖入 `/Applications`；ZIP 用户解压后手动移入该目录。Homebrew 会自动完成这一步。
 2. 在 Finder 中按住 Control 点击 App，选择“打开”并再次确认。若仍被阻止，转到“系统设置 -> 隐私与安全性”，在页面底部点击“仍要打开”。
 3. 只在确认制品来自本仓库且系统界面无法放行时，使用 FAQ 中的精确 `xattr` 命令；不要全局关闭 Gatekeeper。
 4. 打开 App，在“Finder”页注册并启用扩展；必要时打开系统扩展设置。
@@ -199,23 +199,23 @@ brew install --cask guyue55/macrightclick/rightclickassistant
 直接下载 v1.2.1 DMG 时，可与 Cask 中公开的 SHA-256 比对：
 
 ```bash
-shasum -a 256 RightClickAssistant-v1.2.1-macOS-Universal.dmg
+shasum -a 256 RightAction-v1.2.1-macOS-Universal.dmg
 # 期望: 9230f3db5684f537a00c15141e6dac746092ea4fef59e2ab37538d64dba46e37
 ```
 
 手动注册扩展：
 
 ```bash
-pluginkit -a /Applications/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex
-pluginkit -e use -i guyue.RightClickAssistant.Extension
+pluginkit -a /Applications/RightAction.app/Contents/PlugIns/RightActionExtension.appex
+pluginkit -e use -i ikxlpz.RightAction.Extension
 killall Finder
 ```
 
 本地构建目录：
 
 ```bash
-pluginkit -a "$(pwd)/build/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex"
-pluginkit -e use -i guyue.RightClickAssistant.Extension
+pluginkit -a "$(pwd)/build/RightAction.app/Contents/PlugIns/RightActionExtension.appex"
+pluginkit -e use -i ikxlpz.RightAction.Extension
 killall Finder
 ```
 
@@ -229,9 +229,9 @@ killall Finder
 
 产物：
 
-- `build/RightClickAssistant.app`
-- `build/RightClickAssistant.zip`
-- `build/RightClickAssistant.dmg`
+- `build/RightAction.app`
+- `build/RightAction.zip`
+- `build/RightAction.dmg`
 - `ActionVerifier_bin`
 
 基础验证：
@@ -241,8 +241,8 @@ swift test
 bash Tests/CaskStructureTests.sh
 ./Scripts/validate_cask.sh
 ./Scripts/build.sh
-codesign --verify --deep --strict --verbose=2 build/RightClickAssistant.app
-hdiutil verify build/RightClickAssistant.dmg
+codesign --verify --deep --strict --verbose=2 build/RightAction.app
+hdiutil verify build/RightAction.dmg
 ```
 
 `ActionVerifier_bin` 验证 10 项关键链路，并不代表逐一验证全部 30 个动作。运行前请在“动作”页应用“专业”档案：
@@ -290,13 +290,13 @@ NOTARY_PROFILE="your-notarytool-profile" \
 - 日志统一写入 OSLog，不再持续追加 `extension.log`。
 
 ```bash
-log show --predicate 'subsystem == "guyue.RightClickAssistant"' --last 5m --info
+log show --predicate 'subsystem == "ikxlpz.RightAction"' --last 5m --info
 ```
 
 也可以在 `Console.app` 中使用：
 
 ```text
-subsystem == "guyue.RightClickAssistant"
+subsystem == "ikxlpz.RightAction"
 ```
 
 ## 常见问题
@@ -309,18 +309,18 @@ subsystem == "guyue.RightClickAssistant"
 
 在“Finder”页确认：扩展已启用、作用范围为“所有目录”、诊断页收到最近心跳且监听入口大于 0。菜单是否出现与完全磁盘访问是两个独立状态。
 
-如果“桌面”或“文稿”已由 iCloud Drive / File Provider 托管，macOS 可能不向第三方 FinderSync 扩展提供一级动作，同目录中其他 FinderSync 工具也会一起缺失。右键助手会在“服务”子菜单提供两层降级入口：
+如果“桌面”或“文稿”已由 iCloud Drive / File Provider 托管，macOS 可能不向第三方 FinderSync 扩展提供一级动作，同目录中其他 FinderSync 工具也会一起缺失。RightAction 会在“服务”子菜单提供两层降级入口：
 
 ```text
-右键文件/文件夹 -> 服务 -> 右键助手 · 1 ★ 剪切（收藏直达动作示例）
-右键文件/文件夹 -> 服务 -> 右键助手…（完整动作面板）
+右键文件/文件夹 -> 服务 -> RightAction · 1 ★ 剪切（收藏直达动作示例）
+右键文件/文件夹 -> 服务 -> RightAction…（完整动作面板）
 ```
 
-直达区将已启用的收藏按收藏顺序放在前面，再用“剪切、拷贝完整路径、拷贝文件名、在系统终端中打开、获取 SHA256”等常用动作补齐；自动去重且最多显示 8 项。数字用于稳定 macOS 的实际展示顺序，`★` 表示收藏。高风险动作不会进入直达区，依赖未安装外部应用的动作也不会生成。修改收藏、动作开关或外部应用可用状态后，右键助手会按需刷新系统服务，不会后台轮询。
+直达区将已启用的收藏按收藏顺序放在前面，再用“剪切、拷贝完整路径、拷贝文件名、在系统终端中打开、获取 SHA256”等常用动作补齐；自动去重且最多显示 8 项。数字用于稳定 macOS 的实际展示顺序，`★` 表示收藏。高风险动作不会进入直达区，依赖未安装外部应用的动作也不会生成。修改收藏、动作开关或外部应用可用状态后，RightAction 会按需刷新系统服务，不会后台轮询。
 
-“右键助手…”面板复用同一注册表、设置开关和事务队列，提供“全部、常用、新建、文件、终端、工具”分类和搜索；“全部”页依次展示收藏、常用推荐和其余分类，同一动作不会重复出现。面板只展示适用于当前选中项的动作，点击时还会再次校验。普通本地目录仍优先使用 FinderSync 一级菜单。
+“RightAction…”面板复用同一注册表、设置开关和事务队列，提供“全部、常用、新建、文件、终端、工具”分类和搜索；“全部”页依次展示收藏、常用推荐和其余分类，同一动作不会重复出现。面板只展示适用于当前选中项的动作，点击时还会再次校验。普通本地目录仍优先使用 FinderSync 一级菜单。
 
-系统服务不申请“辅助功能”或“自动化”权限，也不使用私有 API。动态快捷项写入当前用户的 `~/Library/Services/RightClickAssistantQuickActions.service`，内容变化时通过 Apple 的 `NSUpdateDynamicServices()` 刷新；普通卸载和完全卸载都会清理该目录。若希望用键盘打开，可在“系统设置 -> 键盘 -> 键盘快捷键 -> 服务”中为“右键助手…”自行设置快捷键，避免软件预设快捷键与现有习惯冲突。
+系统服务不申请“辅助功能”或“自动化”权限，也不使用私有 API。动态快捷项写入当前用户的 `~/Library/Services/RightActionQuickActions.service`，内容变化时通过 Apple 的 `NSUpdateDynamicServices()` 刷新；普通卸载和完全卸载都会清理该目录。若希望用键盘打开，可在“系统设置 -> 键盘 -> 键盘快捷键 -> 服务”中为“RightAction…”自行设置快捷键，避免软件预设快捷键与现有习惯冲突。
 
 ### 如何清理失败动作？
 
@@ -331,8 +331,8 @@ subsystem == "guyue.RightClickAssistant"
 当前 GitHub Release 与 Cask 制品未经 Apple 公证。先尝试 Control 点击 App -> “打开”，或使用“系统设置 -> 隐私与安全性 -> 仍要打开”。只有在确认 App 来自本仓库后，才对这一个 App 移除 quarantine 属性：
 
 ```bash
-sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightClickAssistant.app"
-open "/Applications/RightClickAssistant.app"
+sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightAction.app"
+open "/Applications/RightAction.app"
 ```
 
 `sudo` 会要求输入当前 macOS 管理员密码，输入时终端不会显示字符。命令成功后通常没有输出；随后使用第二条命令启动 App。

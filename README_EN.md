@@ -1,19 +1,19 @@
-# MacRightClick
+# RightAction
 
 English | [简体中文](README.md)
 
 <p align="center">
-  <img src="Resources/AppIcon.png" width="128" height="128" alt="MacRightClick icon" />
+  <img src="Resources/AppIcon.png" width="128" height="128" alt="RightAction icon" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/guyue55/MacRightClick/actions"><img src="https://github.com/guyue55/MacRightClick/workflows/MacRightClick%20CI/CD%20Build/badge.svg" alt="CI status" /></a>
+  <a href="https://github.com/ikxlpz/MacRightClick/actions"><img src="https://github.com/ikxlpz/MacRightClick/workflows/RightAction%20CI/CD%20Build/badge.svg" alt="CI status" /></a>
   <img src="https://img.shields.io/badge/macOS-13.0%2B-blue" alt="macOS 13.0+" />
   <img src="https://img.shields.io/badge/Swift-6.0-orange" alt="Swift 6.0" />
   <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License" />
 </p>
 
-MacRightClick is a free, open-source Finder context-menu assistant for macOS. The current source registers **30 actions**. Enabled actions that apply to the current selection appear directly in the top-level menu by default; a categorized submenu layout remains available.
+RightAction is a free, open-source Finder context-menu assistant for macOS. The current source registers **30 actions**. Enabled actions that apply to the current selection appear directly in the top-level menu by default; a categorized submenu layout remains available.
 
 A FinderSync extension renders menus and captures context, while the host app performs file operations, interaction, and background work. The app contains no ads, telemetry, or background update polling.
 
@@ -95,24 +95,24 @@ The code, GitHub Release, and Homebrew Cask are all at the **v1.2.1 community bu
 
 | Format | Current downloadable artifact |
 | --- | --- |
-| DMG | [RightClickAssistant-v1.2.1-macOS-Universal.dmg](https://github.com/guyue55/MacRightClick/releases/download/v1.2.1/RightClickAssistant-v1.2.1-macOS-Universal.dmg) |
-| ZIP | [RightClickAssistant-v1.2.1-macOS-Universal.zip](https://github.com/guyue55/MacRightClick/releases/download/v1.2.1/RightClickAssistant-v1.2.1-macOS-Universal.zip) |
+| DMG | [RightAction-v1.2.1-macOS-Universal.dmg](https://github.com/ikxlpz/MacRightClick/releases/download/v1.2.1/RightAction-v1.2.1-macOS-Universal.dmg) |
+| ZIP | [RightAction-v1.2.1-macOS-Universal.zip](https://github.com/ikxlpz/MacRightClick/releases/download/v1.2.1/RightAction-v1.2.1-macOS-Universal.zip) |
 
-See [GitHub Releases](https://github.com/guyue55/MacRightClick/releases) for all versions.
+See [GitHub Releases](https://github.com/ikxlpz/MacRightClick/releases) for all versions.
 
 ### Updates And Latest
 
 Every stable tag produces two asset classes:
 
-- `RightClickAssistant-vX.Y.Z-macOS-Universal.*`: immutable versioned assets for Homebrew, rollback, and SHA-256 verification.
-- `RightClickAssistant-Latest.*`: convenience aliases attached to the newest stable Release for manual downloads and simple scripts.
+- `RightAction-vX.Y.Z-macOS-Universal.*`: immutable versioned assets for Homebrew, rollback, and SHA-256 verification.
+- `RightAction-Latest.*`: convenience aliases attached to the newest stable Release for manual downloads and simple scripts.
 
 Stable Latest entry points:
 
 ```text
-https://github.com/guyue55/MacRightClick/releases/latest
-https://github.com/guyue55/MacRightClick/releases/latest/download/RightClickAssistant-Latest.dmg
-https://github.com/guyue55/MacRightClick/releases/latest/download/RightClickAssistant-Latest.zip
+https://github.com/ikxlpz/MacRightClick/releases/latest
+https://github.com/ikxlpz/MacRightClick/releases/latest/download/RightAction-Latest.dmg
+https://github.com/ikxlpz/MacRightClick/releases/latest/download/RightAction-Latest.zip
 ```
 
 > [!NOTE]
@@ -121,20 +121,20 @@ https://github.com/guyue55/MacRightClick/releases/latest/download/RightClickAssi
 ### Homebrew Cask
 
 ```bash
-brew tap guyue55/macrightclick https://github.com/guyue55/MacRightClick.git
-brew install --cask guyue55/macrightclick/rightclickassistant
+brew tap ikxlpz/macrightclick https://github.com/ikxlpz/MacRightClick.git
+brew install --cask ikxlpz/macrightclick/rightaction
 ```
 
 The current Cask is pinned to an immutable v1.2.1 URL with a real SHA-256. `brew upgrade` advances only after this repository updates the Cask version and checksum; it does not bypass version metadata by following a mutable Latest file.
 
-Starting with Homebrew 6.0, third-party taps require explicit trust. The fully qualified name above trusts only the `rightclickassistant` Cask, not the entire tap, and is the recommended command across old and new Homebrew versions. If a previous short-name install reported an `untrusted tap`, run:
+Starting with Homebrew 6.0, third-party taps require explicit trust. The fully qualified name above trusts only the `rightaction` Cask, not the entire tap, and is the recommended command across old and new Homebrew versions. If a previous short-name install reported an `untrusted tap`, run:
 
 ```bash
-brew trust --cask guyue55/macrightclick/rightclickassistant
-brew install --cask guyue55/macrightclick/rightclickassistant
+brew trust --cask ikxlpz/macrightclick/rightaction
+brew install --cask ikxlpz/macrightclick/rightaction
 ```
 
-`brew trust --cask` is available only in Homebrew 6.0 and later. There is no need to grant the broader `brew trust guyue55/macrightclick` permission.
+`brew trust --cask` is available only in Homebrew 6.0 and later. There is no need to grant the broader `brew trust ikxlpz/macrightclick` permission.
 
 > [!NOTE]
 > Homebrew verifies the download SHA-256 and installs the app, but it cannot add a Developer ID signature or Apple notarization. The first launch may still require manual approval in Privacy & Security. Using `--no-quarantine` to bypass that user confirmation is not recommended.
@@ -143,37 +143,37 @@ brew install --cask guyue55/macrightclick/rightclickassistant
 > The current v1.2.1 community build is Ad-hoc signed and not notarized by Apple. After a Homebrew install on a new Mac, macOS may still block the first launch. First try Control-clicking the app and choosing Open, or use System Settings -> Privacy & Security -> Open Anyway. If the app is confirmed to come from this repository and macOS still blocks it, run:
 
 ```bash
-sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightClickAssistant.app"
-open "/Applications/RightClickAssistant.app"
+sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightAction.app"
+open "/Applications/RightAction.app"
 ```
 
 `sudo` prompts for the current macOS administrator password. Terminal does not display password characters while you type; this is expected. The command removes the download quarantine attribute from this app only. It does not disable Gatekeeper or add signing or notarization.
 
 ```bash
 brew update
-brew upgrade --cask guyue55/macrightclick/rightclickassistant
+brew upgrade --cask ikxlpz/macrightclick/rightaction
 ```
 
 > [!NOTE]
-> If an upgrade from v1.2.0 reports `pluginkit -r guyue.RightClickAssistant.Extension`, the failure comes from the uninstall script stored by the old Cask, not from v1.2.1 verification. Run this one-time migration: the first command removes only RightClickAssistant's stale Homebrew receipt, and the second overwrites the app with the verified v1.2.1 DMG.
+> If an upgrade from v1.2.0 reports `pluginkit -r guyue.RightClickAssistant.Extension`, the failure comes from the uninstall script stored by the old Cask, not from v1.2.1 verification. Run this one-time migration: the first command removes only RightAction's stale Homebrew receipt, and the second overwrites the app with the verified v1.2.1 DMG.
 >
 > ```bash
 > rm -rf "$(brew --caskroom)/rightclickassistant"
-> brew install --cask --force guyue55/macrightclick/rightclickassistant
+> brew install --cask --force ikxlpz/macrightclick/rightaction
 > ```
 
 A normal uninstall keeps settings and runtime data, while removing dynamic quick services and refreshing the system menu:
 
 ```bash
-brew uninstall --cask guyue55/macrightclick/rightclickassistant
-brew untap guyue55/macrightclick
+brew uninstall --cask ikxlpz/macrightclick/rightaction
+brew untap ikxlpz/macrightclick
 ```
 
 To also remove settings, shared containers, and failed-action data, perform a full uninstall:
 
 ```bash
-brew uninstall --cask --zap rightclickassistant
-brew untap guyue55/macrightclick
+brew uninstall --cask --zap rightaction
+brew untap ikxlpz/macrightclick
 ```
 
 > [!WARNING]
@@ -182,13 +182,13 @@ brew untap guyue55/macrightclick
 For a local checkout, the current directory can be used as a local tap:
 
 ```bash
-brew tap guyue55/macrightclick "$(pwd)"
-brew install --cask guyue55/macrightclick/rightclickassistant
+brew tap ikxlpz/macrightclick "$(pwd)"
+brew install --cask ikxlpz/macrightclick/rightaction
 ```
 
 ## First Run
 
-1. For a DMG, drag `RightClickAssistant.app` into `/Applications`. For a ZIP, extract it and move it there manually. Homebrew performs this step automatically.
+1. For a DMG, drag `RightAction.app` into `/Applications`. For a ZIP, extract it and move it there manually. Homebrew performs this step automatically.
 2. Control-click the app in Finder, choose Open, and confirm again. If macOS still blocks it, open System Settings -> Privacy & Security and choose Open Anyway near the bottom of the page.
 3. Use the precise `xattr` command in the FAQ only when the artifact is confirmed to come from this repository and the system UI cannot approve it. Never disable Gatekeeper globally.
 4. Open the app, then register and enable the extension on the Finder page; open System Settings if needed.
@@ -199,23 +199,23 @@ brew install --cask guyue55/macrightclick/rightclickassistant
 For a direct v1.2.1 DMG download, compare its SHA-256 with the value published in the Cask:
 
 ```bash
-shasum -a 256 RightClickAssistant-v1.2.1-macOS-Universal.dmg
+shasum -a 256 RightAction-v1.2.1-macOS-Universal.dmg
 # Expected: 9230f3db5684f537a00c15141e6dac746092ea4fef59e2ab37538d64dba46e37
 ```
 
 Manual extension registration:
 
 ```bash
-pluginkit -a /Applications/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex
-pluginkit -e use -i guyue.RightClickAssistant.Extension
+pluginkit -a /Applications/RightAction.app/Contents/PlugIns/RightActionExtension.appex
+pluginkit -e use -i ikxlpz.RightAction.Extension
 killall Finder
 ```
 
 For a local build:
 
 ```bash
-pluginkit -a "$(pwd)/build/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex"
-pluginkit -e use -i guyue.RightClickAssistant.Extension
+pluginkit -a "$(pwd)/build/RightAction.app/Contents/PlugIns/RightActionExtension.appex"
+pluginkit -e use -i ikxlpz.RightAction.Extension
 killall Finder
 ```
 
@@ -229,9 +229,9 @@ Current community artifacts and local development builds both use an Ad-hoc sign
 
 Artifacts:
 
-- `build/RightClickAssistant.app`
-- `build/RightClickAssistant.zip`
-- `build/RightClickAssistant.dmg`
+- `build/RightAction.app`
+- `build/RightAction.zip`
+- `build/RightAction.dmg`
 - `ActionVerifier_bin`
 
 Core checks:
@@ -241,8 +241,8 @@ swift test
 bash Tests/CaskStructureTests.sh
 ./Scripts/validate_cask.sh
 ./Scripts/build.sh
-codesign --verify --deep --strict --verbose=2 build/RightClickAssistant.app
-hdiutil verify build/RightClickAssistant.dmg
+codesign --verify --deep --strict --verbose=2 build/RightAction.app
+hdiutil verify build/RightAction.dmg
 ```
 
 `ActionVerifier_bin` covers 10 key workflows; it does not claim to execute all 30 actions. Apply the Professional profile on the Actions page first:
@@ -290,13 +290,13 @@ The app runs an install, update, or repair command only after an explicit click 
 - Logs use OSLog; the app no longer continuously appends `extension.log`.
 
 ```bash
-log show --predicate 'subsystem == "guyue.RightClickAssistant"' --last 5m --info
+log show --predicate 'subsystem == "ikxlpz.RightAction"' --last 5m --info
 ```
 
 The same predicate can be used in `Console.app`:
 
 ```text
-subsystem == "guyue.RightClickAssistant"
+subsystem == "ikxlpz.RightAction"
 ```
 
 ## FAQ
@@ -309,18 +309,18 @@ Return to the Finder page and click Recheck. If the state remains stale, use Rel
 
 On the Finder page, verify that the extension is enabled and Watch Scope is Everywhere. The Diagnostics page should show a recent heartbeat with at least one observed entry. Menu visibility and Full Disk Access are separate states.
 
-If Desktop or Documents is managed by iCloud Drive / File Provider, macOS may suppress third-party FinderSync actions in that domain; other FinderSync tools disappear from the same menu as well. RightClickAssistant therefore provides two fallback levels under Services:
+If Desktop or Documents is managed by iCloud Drive / File Provider, macOS may suppress third-party FinderSync actions in that domain; other FinderSync tools disappear from the same menu as well. RightAction therefore provides two fallback levels under Services:
 
 ```text
-Control-click a file/folder -> Services -> 右键助手 · 1 ★ 剪切 (favorite direct action example)
-Control-click a file/folder -> Services -> 右键助手… (full action palette)
+Control-click a file/folder -> Services -> RightAction · 1 ★ 剪切 (favorite direct action example)
+Control-click a file/folder -> Services -> RightAction… (full action palette)
 ```
 
 Direct services keep enabled favorites in the user's saved order, then fill from common actions such as Cut, Copy Full Path, Copy File Name, Open in Terminal, and SHA256. Entries are deduplicated and capped at eight. Numeric prefixes stabilize the order shown by macOS, and `★` marks favorites. High-risk actions and actions whose external app is unavailable are never advertised directly. Changes to favorites, action switches, or external app availability refresh Services on demand without background polling.
 
-The “右键助手…” palette reuses the same action registry, settings, and transactional queue. It provides All, Common, New, Files, Terminal, and Tools views plus search. All keeps favorites first, recommendations second, and remaining categories deduplicated. Only actions that apply to the current selection are shown, and every choice is validated again before it is queued. FinderSync remains the preferred first-level menu in regular local folders.
+The “RightAction…” palette reuses the same action registry, settings, and transactional queue. It provides All, Common, New, Files, Terminal, and Tools views plus search. All keeps favorites first, recommendations second, and remaining categories deduplicated. Only actions that apply to the current selection are shown, and every choice is validated again before it is queued. FinderSync remains the preferred first-level menu in regular local folders.
 
-This fallback does not request Accessibility or Automation access and does not use private APIs. Dynamic entries are stored at `~/Library/Services/RightClickAssistantQuickActions.service` and refreshed with Apple's `NSUpdateDynamicServices()` only when their content changes; normal and zap uninstall paths remove the generated bundle. To assign a keyboard shortcut, use System Settings -> Keyboard -> Keyboard Shortcuts -> Services and configure “右键助手…” there; the app intentionally avoids a global default that could conflict with existing shortcuts.
+This fallback does not request Accessibility or Automation access and does not use private APIs. Dynamic entries are stored at `~/Library/Services/RightActionQuickActions.service` and refreshed with Apple's `NSUpdateDynamicServices()` only when their content changes; normal and zap uninstall paths remove the generated bundle. To assign a keyboard shortcut, use System Settings -> Keyboard -> Keyboard Shortcuts -> Services and configure “RightAction…” there; the app intentionally avoids a global default that could conflict with existing shortcuts.
 
 ### How do I clear failed actions?
 
@@ -331,8 +331,8 @@ Diagnostics shows pending, oldest-wait, and failed counts. After confirming that
 Current GitHub Release and Cask artifacts are not notarized by Apple. First try Control-click -> Open, or System Settings -> Privacy & Security -> Open Anyway. Only after confirming that the app came from this repository, remove the quarantine attribute from this app alone:
 
 ```bash
-sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightClickAssistant.app"
-open "/Applications/RightClickAssistant.app"
+sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/RightAction.app"
+open "/Applications/RightAction.app"
 ```
 
 `sudo` prompts for the current macOS administrator password, and Terminal does not display password characters while you type. A successful command normally prints no output; use the second command to launch the app.
