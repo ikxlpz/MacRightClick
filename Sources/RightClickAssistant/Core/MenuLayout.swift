@@ -27,6 +27,8 @@ public enum FinderMenuLayoutSection: Equatable {
 
 /// 把动作集合与用户配置转换成 renderer-neutral 菜单布局。
 public enum FinderMenuLayoutBuilder {
+    public static let defaultBrowserActionPrefix = "guyue.action.utility.defaultBrowser."
+
     public static func build(
         actions: [MenuAction],
         mode: MenuLayoutMode,
@@ -37,19 +39,25 @@ public enum FinderMenuLayoutBuilder {
         let eligible = actions.filter { action in
             isEnabled(action) && isAvailable(action)
         }
+        let browsers = eligible
+            .filter { $0.actionId.hasPrefix(Self.defaultBrowserActionPrefix) }
+            .sorted { $0.actionId < $1.actionId }
+        let others = eligible.filter { !$0.actionId.hasPrefix(Self.defaultBrowserActionPrefix) }
 
+        var sections: [FinderMenuLayoutSection]
         switch mode {
         case .flat:
-            return buildFlatSections(
-                actions: eligible,
-                isFavorite: isFavorite
-            )
+            sections = buildFlatSections(actions: others, isFavorite: isFavorite)
         case .grouped:
-            return buildGroupedSections(
-                actions: eligible,
-                isFavorite: isFavorite
-            )
+            sections = buildGroupedSections(actions: others, isFavorite: isFavorite)
         }
+        if !browsers.isEmpty {
+            sections.append(.submenu(
+                title: "切换默认浏览器",
+                actionIds: browsers.map(\.actionId)
+            ))
+        }
+        return sections
     }
 
     private static func buildFlatSections(

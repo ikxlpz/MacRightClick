@@ -344,6 +344,9 @@ class FinderSync: FIFinderSync {
         )
         item.tag = FinderSync.getTag(for: action.actionId, invocationKind: invocationKind)
         item.target = self
+        if let browserAction = action as? DefaultBrowserAction, browserAction.isCurrent {
+            item.state = .on
+        }
         return item
     }
 

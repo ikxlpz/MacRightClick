@@ -45,7 +45,7 @@ final class RightClickAssistantTests: XCTestCase {
     func testDefaultRegistryHasUniqueActionIDs() {
         let actions = DefaultActionRegistry.makeActions()
 
-        XCTAssertEqual(actions.count, 31)
+        XCTAssertEqual(actions.count, 33)
         XCTAssertEqual(Set(actions.map(\.actionId)).count, actions.count)
     }
 
