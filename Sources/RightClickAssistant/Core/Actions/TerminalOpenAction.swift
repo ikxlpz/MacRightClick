@@ -23,11 +23,11 @@ public enum TerminalEditorType: String, Codable, CaseIterable, Sendable {
     
     public var displayName: String {
         switch self {
-        case .terminal: return "系统终端 (Terminal)"
+        case .terminal: return "终端"
         case .iterm2: return "iTerm2"
-        case .warp: return "Warp 终端"
-        case .vscode: return "Visual Studio Code"
-        case .sublime: return "Sublime Text"
+        case .warp: return "Warp"
+        case .vscode: return "VS Code"
+        case .sublime: return "Sublime"
         case .cursor: return "Cursor"
         }
     }
@@ -56,7 +56,8 @@ public final class TerminalOpenAction: MenuAction, @unchecked Sendable {
     public init(type: TerminalEditorType) {
         self.appType = type
         self.actionId = "guyue.action.terminal.\(type.rawValue)"
-        self.localizedTitle = "在 \(type.displayName) 中打开"
+        let name = type.displayName
+        self.localizedTitle = name.contains(where: { !$0.isASCII }) ? "用\(name)打开" : "用 \(name) 打开"
         
         switch type {
         case .terminal: self.iconName = "terminal"

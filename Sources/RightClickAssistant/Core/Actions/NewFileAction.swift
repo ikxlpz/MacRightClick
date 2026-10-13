@@ -21,15 +21,15 @@ public enum SupportedFileType: String, CaseIterable, Codable, Identifiable {
     
     public var displayName: String {
         switch self {
-        case .txt: return "文本文件 (.txt)"
-        case .md: return "Markdown 文档 (.md)"
-        case .json: return "JSON 配置文件 (.json)"
-        case .csv: return "CSV 表格 (.csv)"
-        case .html: return "HTML 网页 (.html)"
-        case .docx: return "Word 文档 (.docx)"
-        case .xlsx: return "Excel 表格 (.xlsx)"
-        case .pptx: return "PPT 演示文稿 (.pptx)"
-        case .pdf: return "PDF 电子书 (.pdf)"
+        case .txt: return "文本"
+        case .md: return "Markdown"
+        case .json: return "JSON"
+        case .csv: return "CSV"
+        case .html: return "HTML"
+        case .docx: return "Word"
+        case .xlsx: return "Excel"
+        case .pptx: return "PPT"
+        case .pdf: return "PDF"
         }
     }
     
@@ -120,7 +120,8 @@ public final class NewFileAction: MenuAction {
         self.fileType = fileType
         self.customTemplateURL = customTemplateURL
         self.actionId = "guyue.action.newfile.\(fileType.rawValue)"
-        self.localizedTitle = "新建 \(fileType.displayName)"
+        let name = fileType.displayName
+        self.localizedTitle = name.contains(where: { !$0.isASCII }) ? "新建\(name)" : "新建 \(name)"
         
         switch fileType {
         case .txt: self.iconName = "doc.text"

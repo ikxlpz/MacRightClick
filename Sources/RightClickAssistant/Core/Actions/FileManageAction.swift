@@ -188,8 +188,8 @@ public final class FileManageAction: MenuAction, @unchecked Sendable {
             case .cut: self.localizedTitle = "剪切"
             case .paste: self.localizedTitle = "粘贴"
             case .permanentDelete: self.localizedTitle = "彻底删除"
-            case .copyPath: self.localizedTitle = "拷贝完整路径"
-            case .copyName: self.localizedTitle = "拷贝文件名"
+            case .copyPath: self.localizedTitle = "复制路径"
+            case .copyName: self.localizedTitle = "复制名称"
             case .moveTo: self.localizedTitle = "移动到..."
             case .copyTo: self.localizedTitle = "复制到..."
             }

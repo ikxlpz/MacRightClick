@@ -81,22 +81,22 @@ public final class UtilityAction: MenuAction, Sendable {
         
         switch type {
         case .calculateMD5:
-            self.localizedTitle = "获取文件 MD5 校验码"
+            self.localizedTitle = "复制 MD5"
             self.iconName = "number.square"
         case .calculateSHA256:
-            self.localizedTitle = "获取文件 SHA256 校验码"
+            self.localizedTitle = "复制 SHA256"
             self.iconName = "number.square.fill"
         case .toggleHiddenFiles:
-            self.localizedTitle = "切换显示隐藏文件"
+            self.localizedTitle = "切换隐藏文件"
             self.iconName = "eye.slash"
         case .textToQRCode:
-            self.localizedTitle = "从剪贴板生成二维码"
+            self.localizedTitle = "剪贴板二维码"
             self.iconName = "qrcode"
         case .convertToPNG:
-            self.localizedTitle = "转换为 PNG 格式"
+            self.localizedTitle = "转 PNG"
             self.iconName = "photo"
         case .convertToJPEG:
-            self.localizedTitle = "转换为 JPEG 格式"
+            self.localizedTitle = "转 JPEG"
             self.iconName = "photo.fill"
         }
     }
