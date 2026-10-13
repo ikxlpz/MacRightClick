@@ -71,7 +71,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
         )
         
         window.delegate = self // 【关键修复】：指定 Window 代理，使 windowShouldClose 方法能被正确触发
-        window.title = "开源右键助手 (RightClickAssistant)"
+        window.title = "右键助手"
+        window.titleVisibility = .visible
+        window.titlebarAppearsTransparent = true
+        window.titlebarSeparatorStyle = .none
+        window.toolbarStyle = .unified
         window.center()
         window.setFrameAutosaveName("MainWindow")
         window.contentView = NSHostingView(rootView: contentView)

@@ -1,14 +1,14 @@
 import SwiftUI
 
-/// 侧边栏导航条目
-enum SidebarItem: String, CaseIterable, Identifiable {
-    case overview = "overview"
-    case actions = "actions"
-    case permissions = "permissions"
-    case diagnostics = "diagnostics"
-    case advanced = "advanced"
+/// 设置页分页。使用系统标签栏，不再放左侧边栏。
+enum SettingsPage: String, CaseIterable, Identifiable {
+    case overview
+    case actions
+    case permissions
+    case diagnostics
+    case advanced
 
-    var id: String { self.rawValue }
+    var id: String { rawValue }
 
     var title: String {
         switch self {
@@ -32,44 +32,27 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 }
 
 public struct ContentView: View {
-    @State private var selectedTab: SidebarItem = .overview
+    @State private var selectedTab: SettingsPage = .overview
 
     public init() {}
 
     public var body: some View {
-        NavigationSplitView {
-            List(SidebarItem.allCases, selection: $selectedTab) { item in
-                NavigationLink(value: item) {
-                    Label(item.title, systemImage: item.iconName)
-                        .font(.body)
-                        .padding(.vertical, 2)
-                }
+        TabView(selection: $selectedTab) {
+            ForEach(SettingsPage.allCases) { page in
+                pageContent(page)
+                    .tag(page)
+                    .tabItem {
+                        Label(page.title, systemImage: page.iconName)
+                    }
             }
-            .listStyle(.sidebar)
-            .navigationTitle("右键助手")
-            .frame(minWidth: 180, idealWidth: 190, maxWidth: 220)
-
-        } detail: {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    Text(selectedTab.title)
-                        .font(.system(size: 20, weight: .semibold))
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 14)
-
-                Divider()
-
-                detailContent
-            }
-            .background(Color(NSColor.windowBackgroundColor))
         }
-        .frame(minWidth: 850, minHeight: 600)
+        .systemTabBar()
+        .frame(minWidth: 760, minHeight: 560)
     }
 
     @ViewBuilder
-    private var detailContent: some View {
-        switch selectedTab {
+    private func pageContent(_ page: SettingsPage) -> some View {
+        switch page {
         case .overview:
             OverviewSettingsView()
         case .actions:
@@ -80,6 +63,18 @@ public struct ContentView: View {
             DiagnosticsSettingsView()
         case .advanced:
             AdvancedSettingsView()
+        }
+    }
+}
+
+private extension View {
+    /// macOS 15 起强制使用标签栏。sidebarAdaptable 在 Mac 上会退回左侧边栏。
+    @ViewBuilder
+    func systemTabBar() -> some View {
+        if #available(macOS 15.0, *) {
+            self.tabViewStyle(.tabBarOnly)
+        } else {
+            self
         }
     }
 }
