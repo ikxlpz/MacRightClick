@@ -94,7 +94,7 @@ struct OverviewSettingsView: View {
                 updateStatusView
 
                 Button {
-                    if let url = URL(string: "https://github.com/guyue55/MacRightClick") {
+                    if let url = URL(string: "https://github.com/ikxlpz/MacRightClick") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
