@@ -1,5 +1,5 @@
 import Foundation
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 enum TestStorageError: LocalizedError, Equatable {
     case unsafeContainerPath(URL)
@@ -23,7 +23,7 @@ enum TestStorage {
             .resolvingSymlinksInPath()
             .standardizedFileURL
         let root = resolvedBaseDirectory
-            .appendingPathComponent("RightClickAssistantTests")
+            .appendingPathComponent("RightActionTests")
             .appendingPathComponent("\(testCaseName)-\(UUID().uuidString)", isDirectory: true)
             .standardizedFileURL
 

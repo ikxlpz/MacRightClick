@@ -14,12 +14,12 @@ macOS 上架 MAS 的应用**必须启用 App Sandbox**。当前主 App 在站外
 
 ## 2. 正式 App Group
 
-当前站外分发使用 Extension 沙盒目录（`~/Library/Containers/guyue.RightClickAssistant.Extension/Data`）作为共享中介。MAS 下应改用 Apple 正式的 App Group 容器。
+当前站外分发使用 Extension 沙盒目录（`~/Library/Containers/ikxlpz.RightAction.Extension/Data`）作为共享中介。MAS 下应改用 Apple 正式的 App Group 容器。
 
 需要修改：
 
 - `SharedStorageManager.forceLocalSandboxExchange` 改为 `false`。
-- 确认 `group.guyue.RightClickAssistant` 已在 Developer 账号的 App ID 和 Provisioning Profile 中配置。
+- 确认 `group.ikxlpz.RightAction` 已在 Developer 账号的 App ID 和 Provisioning Profile 中配置。
 - 测试 App Group `containerURL(forSecurityApplicationGroupIdentifier:)` 在两端的读写一致性。
 
 ## 3. Security-Scoped Access / Bookmarks
@@ -63,7 +63,7 @@ MAS 路线与站外分发是两种不同的签名、沙盒和分发模式。建�
 
 ## 7. Distribution.swift 常量映射
 
-本轮新增 `Sources/RightClickAssistant/Core/Distribution.swift` 把"分发路线"从运行时探测下沉为编译期常量，三条路线的常量映射如下：
+本轮新增 `Sources/RightAction/Core/Distribution.swift` 把"分发路线"从运行时探测下沉为编译期常量，三条路线的常量映射如下：
 
 | Route             | `-D` 宏          | `usesAppGroup` | `allowsCrossContainerExchange` | 优化级 |
 | ----------------- | ----------------- | -------------- | ------------------------------ | ------ |

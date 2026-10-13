@@ -7,7 +7,7 @@
          注：codesign 的 entitlements 解析器对 XML-like token 敏感，本注释保持纯文字。 -->
     <key>com.apple.security.application-groups</key>
     <array>
-        <string>group.guyue.RightClickAssistant</string>
+        <string>group.ikxlpz.RightAction</string>
     </array>
 </dict>
 </plist>

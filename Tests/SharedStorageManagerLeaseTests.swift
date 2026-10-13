@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 /// 验证 PendingAction 消费的事务化（P1-2）：
 /// 1. 拿到 lease 但没 ack（模拟崩溃）→ 重启后 reclaim 能把孤儿事件搬回 PendingActions；
@@ -33,7 +33,7 @@ final class SharedStorageManagerLeaseTests: XCTestCase {
 
     func testStorageRejectsSymlinkResolvingIntoContainersBeforeCreation() throws {
         let fixtureRoot = FileManager.default.temporaryDirectory
-            .appendingPathComponent("RightClickAssistantUnsafePathTests")
+            .appendingPathComponent("RightActionUnsafePathTests")
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let containersRoot = fixtureRoot
             .appendingPathComponent("Library/Containers", isDirectory: true)
@@ -61,7 +61,7 @@ final class SharedStorageManagerLeaseTests: XCTestCase {
             try TestStorage.removeIfPresent(storage.root)
         }
 
-        let suiteName = "guyue.RightClickAssistantTests.\(UUID().uuidString)"
+        let suiteName = "ikxlpz.RightActionTests.\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
         addTeardownBlock { [suiteName] in
             UserDefaults(suiteName: suiteName)?.removePersistentDomain(forName: suiteName)
@@ -116,7 +116,7 @@ final class SharedStorageManagerLeaseTests: XCTestCase {
             try TestStorage.removeIfPresent(storage.root)
         }
 
-        let suiteName = "guyue.RightClickAssistantTests.mas.\(UUID().uuidString)"
+        let suiteName = "ikxlpz.RightActionTests.mas.\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
         addTeardownBlock { [suiteName] in
             UserDefaults(suiteName: suiteName)?.removePersistentDomain(forName: suiteName)
@@ -148,7 +148,7 @@ final class SharedStorageManagerLeaseTests: XCTestCase {
             try TestStorage.removeIfPresent(storage.root)
         }
 
-        let suiteName = "guyue.RightClickAssistantTests.write-failure.\(UUID().uuidString)"
+        let suiteName = "ikxlpz.RightActionTests.write-failure.\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
         defaults.set(false, forKey: "write_failure")
         addTeardownBlock { [suiteName] in

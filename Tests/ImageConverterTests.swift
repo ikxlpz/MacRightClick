@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 final class ImageConverterTests: XCTestCase {
     func testConvertsGrayscaleAlphaPNGToJPEG() throws {

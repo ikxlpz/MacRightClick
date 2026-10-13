@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 /// 验证 BackgroundActionRunner 的 3 条关键不变量：
 /// 1. submit 立即返回，不阻塞调用方（包含 folder-monitor 串行队列场景）；

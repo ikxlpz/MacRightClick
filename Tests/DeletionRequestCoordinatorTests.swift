@@ -1,6 +1,6 @@
 import XCTest
 import AppKit
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 /// 验证 DeletionRequestCoordinator 的并发裁决正确，
 /// 与真机死锁场景一一对应：

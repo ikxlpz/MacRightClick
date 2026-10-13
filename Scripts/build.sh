@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==============================================================================
-# 开源右键助手 (RightClickAssistant) 自动化编译与打包脚本 (仅 Apple Silicon / arm64)
+# RightAction 自动化编译与打包脚本 (仅 Apple Silicon / arm64)
 # ==============================================================================
 set -euo pipefail
 
@@ -9,7 +9,7 @@ echo "🚀 [Build] 开始自动化编译与打包流程..."
 
 # 1. 初始化目录
 BUILD_DIR="build"
-APP_NAME="RightClickAssistant"
+APP_NAME="RightAction"
 APP_BUNDLE="$BUILD_DIR/$APP_NAME.app"
 EXT_BUNDLE="$APP_BUNDLE/Contents/PlugIns/${APP_NAME}Extension.appex"
 DISTRIBUTION_ROUTE="${DISTRIBUTION_ROUTE:-website-dev}"
@@ -105,13 +105,13 @@ cat <<EOF > "$APP_BUNDLE/Contents/Info.plist"
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>guyue.RightClickAssistant</string>
+    <string>ikxlpz.RightAction</string>
     <key>CFBundleName</key>
-    <string>RightClickAssistant</string>
+    <string>RightAction</string>
     <key>CFBundleDisplayName</key>
-    <string>右键助手</string>
+    <string>RightAction</string>
     <key>CFBundleExecutable</key>
-    <string>RightClickAssistant</string>
+    <string>RightAction</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -130,9 +130,9 @@ cat <<EOF > "$APP_BUNDLE/Contents/Info.plist"
     <array>
         <dict>
             <key>NSMenuItem</key>
-            <dict><key>default</key><string>右键助手…</string></dict>
+            <dict><key>default</key><string>RightAction…</string></dict>
             <key>NSMessage</key><string>performFinderService</string>
-            <key>NSPortName</key><string>RightClickAssistant</string>
+            <key>NSPortName</key><string>RightAction</string>
             <key>NSRequiredContext</key>
             <dict><key>NSTextContent</key><string>FilePath</string></dict>
             <key>NSUserData</key><string>guyue.service.openActionPalette</string>
@@ -151,13 +151,13 @@ cat <<EOF > "$EXT_BUNDLE/Contents/Info.plist"
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>guyue.RightClickAssistant.Extension</string>
+    <string>ikxlpz.RightAction.Extension</string>
     <key>CFBundleName</key>
-    <string>RightClickAssistantExtension</string>
+    <string>RightActionExtension</string>
     <key>CFBundleDisplayName</key>
-    <string>右键助手扩展</string>
+    <string>RightAction 扩展</string>
     <key>CFBundleExecutable</key>
-    <string>RightClickAssistantExtension</string>
+    <string>RightActionExtension</string>
     <key>CFBundlePackageType</key>
     <string>XPC!</string>
     <key>CFBundleShortVersionString</key>
@@ -228,91 +228,91 @@ fi
 
 # 5. 源码列表定义
 HOST_SOURCES="
-    Sources/RightClickAssistant/AppDelegate.swift \
-    Sources/RightClickAssistant/FinderServicesProvider.swift \
-    Sources/RightClickAssistant/FinderQuickServiceManager.swift \
-    Sources/RightClickAssistant/Views/ContentView.swift \
-    Sources/RightClickAssistant/Views/GeneralSettingsView.swift \
-    Sources/RightClickAssistant/Views/ActionsSettingsView.swift \
-    Sources/RightClickAssistant/Views/FinderSettingsView.swift \
-    Sources/RightClickAssistant/Views/DiagnosticsSettingsView.swift \
-    Sources/RightClickAssistant/Views/AdvancedSettingsView.swift \
-    Sources/RightClickAssistant/Views/SettingsComponents.swift \
-    Sources/RightClickAssistant/Views/FinderServicePaletteView.swift \
-    Sources/RightClickAssistant/Core/MenuAction.swift \
-    Sources/RightClickAssistant/Core/ActionProfile.swift \
-    Sources/RightClickAssistant/Core/DefaultActionRegistry.swift \
-    Sources/RightClickAssistant/Core/MenuLayout.swift \
-    Sources/RightClickAssistant/Core/SharedStorageManager.swift \
-    Sources/RightClickAssistant/Core/SharedFolderMonitor.swift \
-    Sources/RightClickAssistant/Core/ActionDispatcher.swift \
-    Sources/RightClickAssistant/Core/SharedHUDManager.swift \
-    Sources/RightClickAssistant/Core/FullDiskAccessChecker.swift \
-    Sources/RightClickAssistant/Core/LaunchServiceManager.swift \
-    Sources/RightClickAssistant/Core/LaunchPresentationPolicy.swift \
-    Sources/RightClickAssistant/Core/FinderExtensionDiagnostics.swift \
-    Sources/RightClickAssistant/Core/FinderServiceCatalog.swift \
-    Sources/RightClickAssistant/Core/FinderQuickActions.swift \
-    Sources/RightClickAssistant/Core/FinderQuickServiceProtocol.swift \
-    Sources/RightClickAssistant/Core/ExtensionHeartbeat.swift \
-    Sources/RightClickAssistant/Core/SystemReloader.swift \
-    Sources/RightClickAssistant/Core/PermissionRefreshCoordinator.swift \
-    Sources/RightClickAssistant/Core/ExternalToolManager.swift \
-    Sources/RightClickAssistant/Core/AppUpdateChecker.swift \
-    Sources/RightClickAssistant/Core/Actions/NewFileAction.swift \
-    Sources/RightClickAssistant/Core/Actions/FileManageAction.swift \
-    Sources/RightClickAssistant/Core/Actions/PathCopyService.swift \
-    Sources/RightClickAssistant/Core/Actions/PathCopyAction.swift \
-    Sources/RightClickAssistant/Core/Actions/ConfirmationPresenter.swift \
-    Sources/RightClickAssistant/Core/Actions/DeletionRequestCoordinator.swift \
-    Sources/RightClickAssistant/Core/Actions/InteractiveActionRunner.swift \
-    Sources/RightClickAssistant/Core/Actions/BackgroundActionRunner.swift \
-    Sources/RightClickAssistant/Core/Actions/TerminalOpenAction.swift \
-    Sources/RightClickAssistant/Core/Actions/UtilityAction.swift \
-    Sources/RightClickAssistant/Core/Actions/DefaultBrowserAction.swift \
-    Sources/RightClickAssistant/Core/FileHashCalculator.swift \
-    Sources/RightClickAssistant/Core/Logging/AppLog.swift \
-    Sources/RightClickAssistant/Core/Distribution.swift \
-    Sources/RightClickAssistant/Core/ActionConfigCache.swift \
-    Sources/RightClickAssistant/Core/InstalledAppRegistry.swift \
-    Sources/RightClickAssistant/Core/Actions/QRCodePanel.swift
+    Sources/RightAction/AppDelegate.swift \
+    Sources/RightAction/FinderServicesProvider.swift \
+    Sources/RightAction/FinderQuickServiceManager.swift \
+    Sources/RightAction/Views/ContentView.swift \
+    Sources/RightAction/Views/GeneralSettingsView.swift \
+    Sources/RightAction/Views/ActionsSettingsView.swift \
+    Sources/RightAction/Views/FinderSettingsView.swift \
+    Sources/RightAction/Views/DiagnosticsSettingsView.swift \
+    Sources/RightAction/Views/AdvancedSettingsView.swift \
+    Sources/RightAction/Views/SettingsComponents.swift \
+    Sources/RightAction/Views/FinderServicePaletteView.swift \
+    Sources/RightAction/Core/MenuAction.swift \
+    Sources/RightAction/Core/ActionProfile.swift \
+    Sources/RightAction/Core/DefaultActionRegistry.swift \
+    Sources/RightAction/Core/MenuLayout.swift \
+    Sources/RightAction/Core/SharedStorageManager.swift \
+    Sources/RightAction/Core/SharedFolderMonitor.swift \
+    Sources/RightAction/Core/ActionDispatcher.swift \
+    Sources/RightAction/Core/SharedHUDManager.swift \
+    Sources/RightAction/Core/FullDiskAccessChecker.swift \
+    Sources/RightAction/Core/LaunchServiceManager.swift \
+    Sources/RightAction/Core/LaunchPresentationPolicy.swift \
+    Sources/RightAction/Core/FinderExtensionDiagnostics.swift \
+    Sources/RightAction/Core/FinderServiceCatalog.swift \
+    Sources/RightAction/Core/FinderQuickActions.swift \
+    Sources/RightAction/Core/FinderQuickServiceProtocol.swift \
+    Sources/RightAction/Core/ExtensionHeartbeat.swift \
+    Sources/RightAction/Core/SystemReloader.swift \
+    Sources/RightAction/Core/PermissionRefreshCoordinator.swift \
+    Sources/RightAction/Core/ExternalToolManager.swift \
+    Sources/RightAction/Core/AppUpdateChecker.swift \
+    Sources/RightAction/Core/Actions/NewFileAction.swift \
+    Sources/RightAction/Core/Actions/FileManageAction.swift \
+    Sources/RightAction/Core/Actions/PathCopyService.swift \
+    Sources/RightAction/Core/Actions/PathCopyAction.swift \
+    Sources/RightAction/Core/Actions/ConfirmationPresenter.swift \
+    Sources/RightAction/Core/Actions/DeletionRequestCoordinator.swift \
+    Sources/RightAction/Core/Actions/InteractiveActionRunner.swift \
+    Sources/RightAction/Core/Actions/BackgroundActionRunner.swift \
+    Sources/RightAction/Core/Actions/TerminalOpenAction.swift \
+    Sources/RightAction/Core/Actions/UtilityAction.swift \
+    Sources/RightAction/Core/Actions/DefaultBrowserAction.swift \
+    Sources/RightAction/Core/FileHashCalculator.swift \
+    Sources/RightAction/Core/Logging/AppLog.swift \
+    Sources/RightAction/Core/Distribution.swift \
+    Sources/RightAction/Core/ActionConfigCache.swift \
+    Sources/RightAction/Core/InstalledAppRegistry.swift \
+    Sources/RightAction/Core/Actions/QRCodePanel.swift
 "
 
 EXT_SOURCES="
-    Sources/RightClickAssistantExtension/FinderSync.swift \
-    Sources/RightClickAssistant/Core/MenuAction.swift \
-    Sources/RightClickAssistant/Core/ActionProfile.swift \
-    Sources/RightClickAssistant/Core/DefaultActionRegistry.swift \
-    Sources/RightClickAssistant/Core/MenuLayout.swift \
-    Sources/RightClickAssistant/Core/SharedStorageManager.swift \
-    Sources/RightClickAssistant/Core/ActionDispatcher.swift \
-    Sources/RightClickAssistant/Core/SharedHUDManager.swift \
-    Sources/RightClickAssistant/Core/FullDiskAccessChecker.swift \
-    Sources/RightClickAssistant/Core/LaunchPresentationPolicy.swift \
-    Sources/RightClickAssistant/Core/ExtensionHeartbeat.swift \
-    Sources/RightClickAssistant/Core/Actions/NewFileAction.swift \
-    Sources/RightClickAssistant/Core/Actions/FileManageAction.swift \
-    Sources/RightClickAssistant/Core/Actions/PathCopyService.swift \
-    Sources/RightClickAssistant/Core/Actions/PathCopyAction.swift \
-    Sources/RightClickAssistant/Core/Actions/ConfirmationPresenter.swift \
-    Sources/RightClickAssistant/Core/Actions/DeletionRequestCoordinator.swift \
-    Sources/RightClickAssistant/Core/Actions/InteractiveActionRunner.swift \
-    Sources/RightClickAssistant/Core/Actions/BackgroundActionRunner.swift \
-    Sources/RightClickAssistant/Core/Actions/TerminalOpenAction.swift \
-    Sources/RightClickAssistant/Core/Actions/UtilityAction.swift \
-    Sources/RightClickAssistant/Core/Actions/DefaultBrowserAction.swift \
-    Sources/RightClickAssistant/Core/FileHashCalculator.swift \
-    Sources/RightClickAssistant/Core/Logging/AppLog.swift \
-    Sources/RightClickAssistant/Core/Distribution.swift \
-    Sources/RightClickAssistant/Core/ActionConfigCache.swift \
-    Sources/RightClickAssistant/Core/InstalledAppRegistry.swift \
-    Sources/RightClickAssistant/Core/Actions/QRCodePanel.swift
+    Sources/RightActionExtension/FinderSync.swift \
+    Sources/RightAction/Core/MenuAction.swift \
+    Sources/RightAction/Core/ActionProfile.swift \
+    Sources/RightAction/Core/DefaultActionRegistry.swift \
+    Sources/RightAction/Core/MenuLayout.swift \
+    Sources/RightAction/Core/SharedStorageManager.swift \
+    Sources/RightAction/Core/ActionDispatcher.swift \
+    Sources/RightAction/Core/SharedHUDManager.swift \
+    Sources/RightAction/Core/FullDiskAccessChecker.swift \
+    Sources/RightAction/Core/LaunchPresentationPolicy.swift \
+    Sources/RightAction/Core/ExtensionHeartbeat.swift \
+    Sources/RightAction/Core/Actions/NewFileAction.swift \
+    Sources/RightAction/Core/Actions/FileManageAction.swift \
+    Sources/RightAction/Core/Actions/PathCopyService.swift \
+    Sources/RightAction/Core/Actions/PathCopyAction.swift \
+    Sources/RightAction/Core/Actions/ConfirmationPresenter.swift \
+    Sources/RightAction/Core/Actions/DeletionRequestCoordinator.swift \
+    Sources/RightAction/Core/Actions/InteractiveActionRunner.swift \
+    Sources/RightAction/Core/Actions/BackgroundActionRunner.swift \
+    Sources/RightAction/Core/Actions/TerminalOpenAction.swift \
+    Sources/RightAction/Core/Actions/UtilityAction.swift \
+    Sources/RightAction/Core/Actions/DefaultBrowserAction.swift \
+    Sources/RightAction/Core/FileHashCalculator.swift \
+    Sources/RightAction/Core/Logging/AppLog.swift \
+    Sources/RightAction/Core/Distribution.swift \
+    Sources/RightAction/Core/ActionConfigCache.swift \
+    Sources/RightAction/Core/InstalledAppRegistry.swift \
+    Sources/RightAction/Core/Actions/QRCodePanel.swift
 "
 
 SDK_PATH=$(xcrun --show-sdk-path)
 COMMON_FLAGS="-Onone -parse-as-library -sdk $SDK_PATH -vfsoverlay $BUILD_DIR/overlay.yaml"
 
-# 按分发路线注入编译期常量，供 Sources/RightClickAssistant/Core/Distribution.swift 读取
+# 按分发路线注入编译期常量，供 Sources/RightAction/Core/Distribution.swift 读取
 case "$DISTRIBUTION_ROUTE" in
     website-dev)     COMMON_FLAGS="$COMMON_FLAGS -D WEBSITE_DEV" ;;
     website-release) COMMON_FLAGS="$COMMON_FLAGS -D WEBSITE_RELEASE" ;;
@@ -329,19 +329,19 @@ esac
 
 # 6. 只编译 Apple Silicon。Intel 需要时再加回 x86_64 + lipo。
 echo "🛠️ [Build] 编译宿主主程序 (arm64)..."
-swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $HOST_SOURCES -o "$APP_BUNDLE/Contents/MacOS/RightClickAssistant"
+swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $HOST_SOURCES -o "$APP_BUNDLE/Contents/MacOS/RightAction"
 
 echo "🛠️ [Build] 编译 Finder 快捷服务 helper (arm64)..."
 QUICK_SERVICE_SOURCES="
-    Sources/RightClickAssistantQuickService/main.swift \
-    Sources/RightClickAssistant/Core/FinderQuickServiceProtocol.swift
+    Sources/RightActionQuickService/main.swift \
+    Sources/RightAction/Core/FinderQuickServiceProtocol.swift
 "
 swiftc -Onone -sdk "$SDK_PATH" -vfsoverlay "$BUILD_DIR/overlay.yaml" \
     -target arm64-apple-macosx13.0 $QUICK_SERVICE_SOURCES \
-    -o "$APP_BUNDLE/Contents/Resources/RightClickAssistantQuickService"
+    -o "$APP_BUNDLE/Contents/Resources/RightActionQuickService"
 
 echo "🛠️ [Build] 编译 Finder Sync 扩展插件 (arm64)..."
-swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $EXT_SOURCES -o "$EXT_BUNDLE/Contents/MacOS/RightClickAssistantExtension"
+swiftc $COMMON_FLAGS -target arm64-apple-macosx13.0 $EXT_SOURCES -o "$EXT_BUNDLE/Contents/MacOS/RightActionExtension"
 
 echo "🛠️ [Build] 编译 ActionVerifier 校验程序 (arm64)..."
 swiftc -Onone -parse-as-library -sdk $SDK_PATH -vfsoverlay "$BUILD_DIR/overlay.yaml" -target arm64-apple-macosx13.0 Sources/ActionVerifier/ActionVerifier.swift -o "ActionVerifier_bin"
@@ -375,14 +375,14 @@ for f in "$HOST_ENTITLEMENTS" "$EXT_ENTITLEMENTS"; do
     fi
 done
 
-cp "$HOST_ENTITLEMENTS" "$BUILD_DIR/RightClickAssistant.entitlements"
-cp "$EXT_ENTITLEMENTS"  "$BUILD_DIR/RightClickAssistantExtension.entitlements"
+cp "$HOST_ENTITLEMENTS" "$BUILD_DIR/RightAction.entitlements"
+cp "$EXT_ENTITLEMENTS"  "$BUILD_DIR/RightActionExtension.entitlements"
 
 echo "🔐 [Build] 自动进行嵌套签名..."
 # A. 先签名最内层插件的二进制与整个 XPC 插件 bundle
-codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightClickAssistantExtension.entitlements" "$EXT_BUNDLE/Contents/MacOS/RightClickAssistantExtension"
-codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightClickAssistantExtension.entitlements" "$EXT_BUNDLE"
-codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS "$APP_BUNDLE/Contents/Resources/RightClickAssistantQuickService"
+codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightActionExtension.entitlements" "$EXT_BUNDLE/Contents/MacOS/RightActionExtension"
+codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightActionExtension.entitlements" "$EXT_BUNDLE"
+codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS "$APP_BUNDLE/Contents/Resources/RightActionQuickService"
 
 # B. 再签名主程序二进制。官网分发路线保持主 App 非沙盒，并在 website-release 下启用 hardened runtime。
 # B. 主 App 二进制 + 整个 .app Bundle 都用 host entitlements 模板。
@@ -390,18 +390,18 @@ codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS "$APP_BUNDL
 #    本轮 build.sh 重构后必须显式传入，否则 application-groups 不生效，
 #    SharedStorageManager 与 FinderSync 之间的 cross-container 物理路径访问会被
 #    macOS 13+ Hidden Subsystem Block 拦截。
-codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightClickAssistant.entitlements" "$APP_BUNDLE/Contents/MacOS/RightClickAssistant"
-codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightClickAssistant.entitlements" "$APP_BUNDLE"
+codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightAction.entitlements" "$APP_BUNDLE/Contents/MacOS/RightAction"
+codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS --entitlements "$BUILD_DIR/RightAction.entitlements" "$APP_BUNDLE"
 
 # D. 签名自检程序
 codesign --force --sign "$CODE_SIGN_IDENTITY" $CODESIGN_RUNTIME_ARGS "ActionVerifier_bin"
 
 codesign --verify --deep --strict --verbose=2 "$APP_BUNDLE"
-codesign --verify --strict --verbose=2 "$APP_BUNDLE/Contents/Resources/RightClickAssistantQuickService"
+codesign --verify --strict --verbose=2 "$APP_BUNDLE/Contents/Resources/RightActionQuickService"
 
 if [ "$DISTRIBUTION_ROUTE" = "website-release" ]; then
     echo "🧾 [Build] 提交 App 到 Apple notary service 并 stapler 附票..."
-    NOTARY_ZIP="$BUILD_DIR/RightClickAssistant-notary.zip"
+    NOTARY_ZIP="$BUILD_DIR/RightAction-notary.zip"
     rm -f "$NOTARY_ZIP"
     ditto -c -k --keepParent "$APP_BUNDLE" "$NOTARY_ZIP"
     submit_for_notarization "$NOTARY_ZIP"
@@ -413,7 +413,7 @@ fi
 # 10. 打包压缩为 Distribution 压缩包与 DMG 磁盘映像
 echo "📦 [Build] 正在打包压缩为 distributable .zip 绿色免安装版..."
 cd "$BUILD_DIR"
-zip -r -q "RightClickAssistant.zip" "$APP_NAME.app"
+zip -r -q "RightAction.zip" "$APP_NAME.app"
 cd ..
 
 echo "📦 [Build] 开始构建 Drag-to-Install DMG 磁盘映像..."
@@ -426,12 +426,12 @@ cp -R "$APP_BUNDLE" "$DMG_TEMP_DIR/"
 ln -s /Applications "$DMG_TEMP_DIR/Applications"
 
 # B. 创建原始可写 DMG (UDRW 格式)
-RAW_DMG="$BUILD_DIR/RightClickAssistant_raw.dmg"
+RAW_DMG="$BUILD_DIR/RightAction_raw.dmg"
 echo "⚡ [Build] 清理前次 CI 残留的 DMG 挂载..."
-hdiutil detach "/Volumes/RightClickAssistant" >/dev/null 2>&1 || true
+hdiutil detach "/Volumes/RightAction" >/dev/null 2>&1 || true
 rm -f "$RAW_DMG"
 for attempt in 1 2 3; do
-    if hdiutil create -volname "RightClickAssistant" -srcfolder "$DMG_TEMP_DIR" -ov -format UDRW "$RAW_DMG" >/dev/null 2>&1; then
+    if hdiutil create -volname "RightAction" -srcfolder "$DMG_TEMP_DIR" -ov -format UDRW "$RAW_DMG" >/dev/null 2>&1; then
         break
     fi
     echo "⚠️ [Build] hdiutil create 失败（attempt $attempt/3），重试..."
@@ -451,10 +451,10 @@ sleep 1.5
 # 使用 AppleScript 让 Finder 调整该虚拟盘的布局元数据。添加 Headless 降级保护
 osascript <<EOF || echo "⚠️ [Build] 提示: 当前处于 headless 无显示环境，已安全跳过 Finder UI 窗口排版，默认继承系统基础布局。"
 tell application "Finder"
-    tell disk "RightClickAssistant"
+    tell disk "RightAction"
         open
         delay 1
-        set containerWindow to container window of disk "RightClickAssistant"
+        set containerWindow to container window of disk "RightAction"
         set current view of containerWindow to icon view
         set toolbar visible of containerWindow to false
         set statusbar visible of containerWindow to false
@@ -464,7 +464,7 @@ tell application "Finder"
         set arrangement of icon view options of containerWindow to not arranged
         
         -- 对称拖拽排版
-        set position of item "RightClickAssistant.app" to {150, 180}
+        set position of item "RightAction.app" to {150, 180}
         set position of item "Applications" to {400, 180}
         
         delay 1
@@ -478,7 +478,7 @@ hdiutil detach "$device" >/dev/null || true
 sleep 1
 
 # D. 转换为正式发布版只读高压缩 DMG (UDZO 格式)
-FINAL_DMG="$BUILD_DIR/RightClickAssistant.dmg"
+FINAL_DMG="$BUILD_DIR/RightAction.dmg"
 rm -f "$FINAL_DMG"
 echo "⚡ [Build] 正在将原始映像转换为只读高压缩分发级 DMG..."
 hdiutil convert "$RAW_DMG" -format UDZO -imagekey zlib-level=9 -o "$FINAL_DMG" >/dev/null
@@ -497,7 +497,7 @@ rm -rf "$DMG_TEMP_DIR"
 echo "=============================================================================="
 echo "🎉 [Build] 成功！应用已成功编译并完成双格式打包分发。"
 echo "📍 宿主应用路径: $APP_BUNDLE"
-echo "📦 绿色免安装版: $BUILD_DIR/RightClickAssistant.zip"
-echo "📀 拖拽式安装版: $BUILD_DIR/RightClickAssistant.dmg"
+echo "📦 绿色免安装版: $BUILD_DIR/RightAction.zip"
+echo "📀 拖拽式安装版: $BUILD_DIR/RightAction.dmg"
 echo "🧪 校验程序路径: ./ActionVerifier_bin"
 echo "=============================================================================="

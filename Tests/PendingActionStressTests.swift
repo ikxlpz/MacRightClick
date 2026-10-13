@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 /// CI 友好的 PendingAction 压测：覆盖 lease/ack/reclaim 三件套在并发 + 大批量 +
 /// 异常输入下的不变量，与 `Scripts/stress/*.py` 的真机端到端压测互为镜像。

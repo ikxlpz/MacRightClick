@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 final class FileCutClipboardTests: XCTestCase {
     private var clipboard: FileCutClipboard!

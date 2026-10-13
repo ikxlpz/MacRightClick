@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 /// 验证 InteractiveActionRunner 的 3 条关键不变量：
 /// 1. 任意线程提交都不会阻塞调用者；

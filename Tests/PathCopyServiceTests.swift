@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 final class PathCopyServiceTests: XCTestCase {
     func testShellEscapesSingleQuoteAndSpaces() {

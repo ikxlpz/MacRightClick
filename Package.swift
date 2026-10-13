@@ -2,24 +2,24 @@
 import PackageDescription
 
 let package = Package(
-    name: "RightClickAssistant",
+    name: "RightAction",
     platforms: [
         .macOS(.v13)
     ],
     products: [
         .library(
-            name: "RightClickAssistantCore",
-            targets: ["RightClickAssistantCore"]
+            name: "RightActionCore",
+            targets: ["RightActionCore"]
         )
     ],
     targets: [
         .target(
-            name: "RightClickAssistantCore",
-            path: "Sources/RightClickAssistant/Core"
+            name: "RightActionCore",
+            path: "Sources/RightAction/Core"
         ),
         .testTarget(
-            name: "RightClickAssistantTests",
-            dependencies: ["RightClickAssistantCore"],
+            name: "RightActionTests",
+            dependencies: ["RightActionCore"],
             path: "Tests",
             exclude: [
                 "CaskStructureTests.sh",

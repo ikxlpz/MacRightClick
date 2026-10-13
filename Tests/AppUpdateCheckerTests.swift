@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 final class AppUpdateCheckerTests: XCTestCase {
     func testSemanticVersionOrdersStableVersions() {
@@ -10,7 +10,7 @@ final class AppUpdateCheckerTests: XCTestCase {
 
     func testLatestReleaseDecodingReturnsUpdateURL() async throws {
         let releaseURL = URL(
-            string: "https://github.com/guyue55/MacRightClick/releases/tag/v1.3.0"
+            string: "https://github.com/ikxlpz/MacRightClick/releases/tag/v1.3.0"
         )!
         let data = try JSONSerialization.data(withJSONObject: [
             "tag_name": "v1.3.0",

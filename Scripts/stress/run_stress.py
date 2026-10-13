@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Real-machine stress harness for RightClickAssistant.
+Real-machine stress harness for RightAction.
 
 Targets the cross-process contract that FinderSync extension uses to enqueue
 events: writes JSON files into the shared PendingActions directory exactly
@@ -45,7 +45,7 @@ import time
 import uuid
 
 
-EXT_BUNDLE_ID = "guyue.RightClickAssistant.Extension"
+EXT_BUNDLE_ID = "ikxlpz.RightAction.Extension"
 SHARED_DATA = pathlib.Path(
     f"~/Library/Containers/{EXT_BUNDLE_ID}/Data"
 ).expanduser()
@@ -72,7 +72,7 @@ def now_ts() -> float:
 
 def host_pid() -> int | None:
     out = subprocess.run(
-        ["pgrep", "-f", "RightClickAssistant.app/Contents/MacOS/RightClickAssistant"],
+        ["pgrep", "-f", "RightAction.app/Contents/MacOS/RightAction"],
         capture_output=True,
         text=True,
     )

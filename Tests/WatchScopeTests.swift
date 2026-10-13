@@ -1,5 +1,5 @@
 import XCTest
-@testable import RightClickAssistantCore
+@testable import RightActionCore
 
 /// 验证 WatchScope（作用范围）开关的语义（最小核心）：
 /// 1. 默认是 .everywhere（首次安装即全盘可用，最贴用户预期）；

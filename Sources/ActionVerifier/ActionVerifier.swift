@@ -13,7 +13,7 @@ struct ActionVerifier {
         // 1. 初始化测试专属物理大本营
         let homeDir = NSHomeDirectory()
         let testDirURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("RightClickAssistantVerifier-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("RightActionVerifier-\(UUID().uuidString)", isDirectory: true)
         try? FileManager.default.removeItem(at: testDirURL)
         try? FileManager.default.createDirectory(at: testDirURL, withIntermediateDirectories: true)
         
@@ -21,7 +21,7 @@ struct ActionVerifier {
         
         let sharedRootPath = ProcessInfo.processInfo.environment["RIGHTCLICKASSISTANT_SHARED_ROOT"]
             ?? (homeDir as NSString).appendingPathComponent(
-                "Library/Containers/guyue.RightClickAssistant.Extension/Data"
+                "Library/Containers/ikxlpz.RightAction.Extension/Data"
             )
         let sharedRootURL = URL(fileURLWithPath: sharedRootPath, isDirectory: true)
         let pendingActionsDirectoryURL = sharedRootURL.appendingPathComponent("PendingActions")
@@ -85,7 +85,7 @@ struct ActionVerifier {
             
             // B. 广播分布式空信号，通知驻留主 App 立即进行消费
             DistributedNotificationCenter.default().postNotificationName(
-                Notification.Name("guyue.RightClickAssistant.triggerActionSignal"),
+                Notification.Name("ikxlpz.RightAction.triggerActionSignal"),
                 object: nil,
                 userInfo: nil,
                 deliverImmediately: true
@@ -133,7 +133,7 @@ struct ActionVerifier {
                 try? secondData.write(to: secondURL, options: .atomic)
             }
             DistributedNotificationCenter.default().postNotificationName(
-                Notification.Name("guyue.RightClickAssistant.triggerActionSignal"), object: nil, userInfo: nil, deliverImmediately: true)
+                Notification.Name("ikxlpz.RightAction.triggerActionSignal"), object: nil, userInfo: nil, deliverImmediately: true)
             Thread.sleep(forTimeInterval: 2.5)
             
             let secondURL = testDirURL.appendingPathComponent("未命名 1.md")

@@ -20,15 +20,15 @@ import time
 import uuid
 
 
-EXT_BUNDLE_ID = "guyue.RightClickAssistant.Extension"
+EXT_BUNDLE_ID = "ikxlpz.RightAction.Extension"
 SHARED_DATA = pathlib.Path(
     f"~/Library/Containers/{EXT_BUNDLE_ID}/Data"
 ).expanduser()
 
 PENDING = SHARED_DATA / "PendingActions"
 INFLIGHT = SHARED_DATA / "InFlightActions"
-APP_PATH = "/Applications/RightClickAssistant.app"
-APP_BIN_FRAGMENT = "RightClickAssistant.app/Contents/MacOS/RightClickAssistant"
+APP_PATH = "/Applications/RightAction.app"
+APP_BIN_FRAGMENT = "RightAction.app/Contents/MacOS/RightAction"
 
 
 def host_pid() -> int | None:
@@ -41,7 +41,7 @@ def host_pid() -> int | None:
 
 def kill_host():
     subprocess.run(["pkill", "-9", "-f", APP_BIN_FRAGMENT], check=False)
-    subprocess.run(["pkill", "-9", "-f", "RightClickAssistantExtension"], check=False)
+    subprocess.run(["pkill", "-9", "-f", "RightActionExtension"], check=False)
     deadline = time.monotonic() + 10
     while time.monotonic() < deadline and host_pid() is not None:
         time.sleep(0.2)
