@@ -1,4 +1,4 @@
-name: MacRightClick CI/CD Build
+name: RightAction CI/CD Build
 
 on:
   push:
@@ -50,21 +50,21 @@ jobs:
 
       - name: Verify development artifacts
         run: |
-          codesign --verify --deep --strict --verbose=2 build/RightClickAssistant.app
-          quick_service_helper="build/RightClickAssistant.app/Contents/Resources/RightClickAssistantQuickService"
+          codesign --verify --deep --strict --verbose=2 build/RightAction.app
+          quick_service_helper="build/RightAction.app/Contents/Resources/RightActionQuickService"
           test -x "$quick_service_helper"
           codesign --verify --strict --verbose=2 "$quick_service_helper"
           architectures="$(lipo -archs "$quick_service_helper")"
           [[ "$architectures" == "arm64" ]]
-          hdiutil verify build/RightClickAssistant.dmg
+          hdiutil verify build/RightAction.dmg
 
       - name: Upload development artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: MacRightClick-arm64-development
+          name: RightAction-arm64-development
           path: |
-            build/RightClickAssistant.zip
-            build/RightClickAssistant.dmg
+            build/RightAction.zip
+            build/RightAction.dmg
           retention-days: 14
 
   release:
@@ -99,22 +99,22 @@ jobs:
           VERIFY_BUILD_ARTIFACTS: "1"
         run: |
           ./Scripts/verify_release_metadata.sh
-          codesign --verify --deep --strict --verbose=2 build/RightClickAssistant.app
-          hdiutil verify build/RightClickAssistant.dmg
+          codesign --verify --deep --strict --verbose=2 build/RightAction.app
+          hdiutil verify build/RightAction.dmg
 
           for bundle in \
-            build/RightClickAssistant.app \
-            build/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex \
-            build/RightClickAssistant.app/Contents/Resources/RightClickAssistantQuickService; do
+            build/RightAction.app \
+            build/RightAction.app/Contents/PlugIns/RightActionExtension.appex \
+            build/RightAction.app/Contents/Resources/RightActionQuickService; do
             signature_info="$(codesign -dv --verbose=4 "$bundle" 2>&1)"
             grep -q 'Signature=adhoc' <<<"$signature_info"
             grep -q 'TeamIdentifier=not set' <<<"$signature_info"
           done
 
           for executable in \
-            build/RightClickAssistant.app/Contents/MacOS/RightClickAssistant \
-            build/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex/Contents/MacOS/RightClickAssistantExtension \
-            build/RightClickAssistant.app/Contents/Resources/RightClickAssistantQuickService; do
+            build/RightAction.app/Contents/MacOS/RightAction \
+            build/RightAction.app/Contents/PlugIns/RightActionExtension.appex/Contents/MacOS/RightActionExtension \
+            build/RightAction.app/Contents/Resources/RightActionQuickService; do
             architectures="$(lipo -archs "$executable")"
             [[ "$architectures" == "arm64" ]]
           done
@@ -122,10 +122,10 @@ jobs:
       - name: Prepare immutable and latest release assets
         run: |
           VERSION="$(tr -d '\r\n' < VERSION)"
-          cp build/RightClickAssistant.zip "build/RightClickAssistant-v${VERSION}-macOS-Universal.zip"
-          cp build/RightClickAssistant.dmg "build/RightClickAssistant-v${VERSION}-macOS-Universal.dmg"
-          cp build/RightClickAssistant.zip build/RightClickAssistant-Latest.zip
-          cp build/RightClickAssistant.dmg build/RightClickAssistant-Latest.dmg
+          cp build/RightAction.zip "build/RightAction-v${VERSION}-macOS-Universal.zip"
+          cp build/RightAction.dmg "build/RightAction-v${VERSION}-macOS-Universal.dmg"
+          cp build/RightAction.zip build/RightAction-Latest.zip
+          cp build/RightAction.dmg build/RightAction-Latest.dmg
           cat > build/COMMUNITY_BUILD.txt <<EOF
           Version: ${VERSION}
           Distribution: Ad-hoc community build
@@ -136,21 +136,21 @@ jobs:
           EOF
           cd build
           LC_ALL=C LANG=C shasum -a 256 \
-            "RightClickAssistant-v${VERSION}-macOS-Universal.zip" \
-            "RightClickAssistant-v${VERSION}-macOS-Universal.dmg" \
-            RightClickAssistant-Latest.zip \
-            RightClickAssistant-Latest.dmg \
+            "RightAction-v${VERSION}-macOS-Universal.zip" \
+            "RightAction-v${VERSION}-macOS-Universal.dmg" \
+            RightAction-Latest.zip \
+            RightAction-Latest.dmg \
             COMMUNITY_BUILD.txt > SHA256SUMS
 
       - name: Upload community workflow artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: MacRightClick-${{ github.ref_name }}-community
+          name: RightAction-${{ github.ref_name }}-community
           path: |
-            build/RightClickAssistant-v*-macOS-Universal.zip
-            build/RightClickAssistant-v*-macOS-Universal.dmg
-            build/RightClickAssistant-Latest.zip
-            build/RightClickAssistant-Latest.dmg
+            build/RightAction-v*-macOS-Universal.zip
+            build/RightAction-v*-macOS-Universal.dmg
+            build/RightAction-Latest.zip
+            build/RightAction-Latest.dmg
             build/COMMUNITY_BUILD.txt
             build/SHA256SUMS
           retention-days: 30
@@ -158,10 +158,10 @@ jobs:
       - name: Publish GitHub release
         run: |
           ASSETS=(
-            build/RightClickAssistant-v*-macOS-Universal.zip
-            build/RightClickAssistant-v*-macOS-Universal.dmg
-            build/RightClickAssistant-Latest.zip
-            build/RightClickAssistant-Latest.dmg
+            build/RightAction-v*-macOS-Universal.zip
+            build/RightAction-v*-macOS-Universal.dmg
+            build/RightAction-Latest.zip
+            build/RightAction-Latest.dmg
             build/COMMUNITY_BUILD.txt
             build/SHA256SUMS
           )

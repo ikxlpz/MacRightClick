@@ -24,8 +24,8 @@ check_plist_version() {
 }
 
 if [[ -z "${VERSION_OVERRIDE:-}" || "${VERIFY_BUILD_ARTIFACTS:-0}" == "1" ]]; then
-  check_plist_version "$ROOT_DIR/build/RightClickAssistant.app/Contents/Info.plist" "主程序"
-  check_plist_version "$ROOT_DIR/build/RightClickAssistant.app/Contents/PlugIns/RightClickAssistantExtension.appex/Contents/Info.plist" "Finder 扩展"
+  check_plist_version "$ROOT_DIR/build/RightAction.app/Contents/Info.plist" "主程序"
+  check_plist_version "$ROOT_DIR/build/RightAction.app/Contents/PlugIns/RightActionExtension.appex/Contents/Info.plist" "Finder 扩展"
 fi
 
 echo "✅ [Release] 标签、VERSION 与现有构建产物版本一致: $VERSION_VALUE"
