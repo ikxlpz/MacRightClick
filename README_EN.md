@@ -61,8 +61,6 @@ A FinderSync extension renders menus and captures context, while the host app pe
 ```mermaid
 flowchart LR
     F[Finder / FinderSync] -->|schema v2 event| P[PendingActions]
-    F -->|File Provider fallback| S[macOS Services]
-    S -->|schema v2 event| P
     P -->|atomic lease| I[InFlightActions]
     I --> H[Host ActionDispatcher]
     H --> R[Interactive or background Runner]
@@ -309,18 +307,7 @@ Return to the Finder page and click Recheck. If the state remains stale, use Rel
 
 On the Finder page, verify that the extension is enabled and Watch Scope is Everywhere. The Diagnostics page should show a recent heartbeat with at least one observed entry. Menu visibility and Full Disk Access are separate states.
 
-If Desktop or Documents is managed by iCloud Drive / File Provider, macOS may suppress third-party FinderSync actions in that domain; other FinderSync tools disappear from the same menu as well. RightAction therefore provides two fallback levels under Services:
-
-```text
-Control-click a file/folder -> Services -> RightAction · 1 ★ 剪切 (favorite direct action example)
-Control-click a file/folder -> Services -> RightAction… (full action palette)
-```
-
-Direct services keep enabled favorites in the user's saved order, then fill from common actions such as Cut, Copy Full Path, Copy File Name, Open in Terminal, and SHA256. Entries are deduplicated and capped at eight. Numeric prefixes stabilize the order shown by macOS, and `★` marks favorites. High-risk actions and actions whose external app is unavailable are never advertised directly. Changes to favorites, action switches, or external app availability refresh Services on demand without background polling.
-
-The “RightAction…” palette reuses the same action registry, settings, and transactional queue. It provides All, Common, New, Files, Terminal, and Tools views plus search. All keeps favorites first, recommendations second, and remaining categories deduplicated. Only actions that apply to the current selection are shown, and every choice is validated again before it is queued. FinderSync remains the preferred first-level menu in regular local folders.
-
-This fallback does not request Accessibility or Automation access and does not use private APIs. Dynamic entries are stored at `~/Library/Services/RightActionQuickActions.service` and refreshed with Apple's `NSUpdateDynamicServices()` only when their content changes; normal and zap uninstall paths remove the generated bundle. To assign a keyboard shortcut, use System Settings -> Keyboard -> Keyboard Shortcuts -> Services and configure “RightAction…” there; the app intentionally avoids a global default that could conflict with existing shortcuts.
+If Desktop or Documents is managed by iCloud Drive / File Provider, macOS may suppress third-party FinderSync actions in that domain; other FinderSync tools disappear from the same menu as well. RightAction no longer adds entries to the Services menu.
 
 ### How do I clear failed actions?
 

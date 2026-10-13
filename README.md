@@ -61,8 +61,6 @@ RightAction 是一款免费、开源的 macOS Finder 右键菜单助手。当前
 ```mermaid
 flowchart LR
     F[Finder / FinderSync] -->|schema v2 事件| P[PendingActions]
-    F -->|File Provider 降级| S[macOS 系统服务]
-    S -->|schema v2 事件| P
     P -->|原子租约| I[InFlightActions]
     I --> H[Host ActionDispatcher]
     H --> R[交互或后台 Runner]
@@ -309,18 +307,7 @@ subsystem == "ikxlpz.RightAction"
 
 在“Finder”页确认：扩展已启用、作用范围为“所有目录”、诊断页收到最近心跳且监听入口大于 0。菜单是否出现与完全磁盘访问是两个独立状态。
 
-如果“桌面”或“文稿”已由 iCloud Drive / File Provider 托管，macOS 可能不向第三方 FinderSync 扩展提供一级动作，同目录中其他 FinderSync 工具也会一起缺失。RightAction 会在“服务”子菜单提供两层降级入口：
-
-```text
-右键文件/文件夹 -> 服务 -> RightAction · 1 ★ 剪切（收藏直达动作示例）
-右键文件/文件夹 -> 服务 -> RightAction…（完整动作面板）
-```
-
-直达区将已启用的收藏按收藏顺序放在前面，再用“剪切、拷贝完整路径、拷贝文件名、在系统终端中打开、获取 SHA256”等常用动作补齐；自动去重且最多显示 8 项。数字用于稳定 macOS 的实际展示顺序，`★` 表示收藏。高风险动作不会进入直达区，依赖未安装外部应用的动作也不会生成。修改收藏、动作开关或外部应用可用状态后，RightAction 会按需刷新系统服务，不会后台轮询。
-
-“RightAction…”面板复用同一注册表、设置开关和事务队列，提供“全部、常用、新建、文件、终端、工具”分类和搜索；“全部”页依次展示收藏、常用推荐和其余分类，同一动作不会重复出现。面板只展示适用于当前选中项的动作，点击时还会再次校验。普通本地目录仍优先使用 FinderSync 一级菜单。
-
-系统服务不申请“辅助功能”或“自动化”权限，也不使用私有 API。动态快捷项写入当前用户的 `~/Library/Services/RightActionQuickActions.service`，内容变化时通过 Apple 的 `NSUpdateDynamicServices()` 刷新；普通卸载和完全卸载都会清理该目录。若希望用键盘打开，可在“系统设置 -> 键盘 -> 键盘快捷键 -> 服务”中为“RightAction…”自行设置快捷键，避免软件预设快捷键与现有习惯冲突。
+如果“桌面”或“文稿”已由 iCloud Drive / File Provider 托管，macOS 可能不向第三方 FinderSync 扩展提供一级动作，同目录中其他 FinderSync 工具也会一起缺失。RightAction 不再往“服务”菜单注册快捷项。
 
 ### 如何清理失败动作？
 
