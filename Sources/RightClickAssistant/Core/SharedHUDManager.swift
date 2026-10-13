@@ -91,27 +91,18 @@ public final class SharedHUDManager {
             panel.hasShadow = true
             panel.hidesOnDeactivate = false
             
-            // 5. 高清磨砂玻璃面板 (Visual Effect View)
-            let visualEffectView = NSVisualEffectView(frame: NSRect(x: 0, y: 0, width: width, height: height))
-            visualEffectView.material = .hudWindow
-            visualEffectView.blendingMode = .behindWindow
-            visualEffectView.state = .active
-            visualEffectView.layer?.cornerRadius = 24 // Capsule pill
-            visualEffectView.wantsLayer = true
-            
-            // 6. 新增 1px 自适应微边框，通过半透明描边极大强化深色和浅色模式下的边缘视网膜锐利度
-            visualEffectView.layer?.borderWidth = 1.0
-            visualEffectView.layer?.borderColor = NSColor.separatorColor.cgColor
-            
+            // 内容放在独立视图里，再交给液态玻璃或磨砂底托裁成圆角。
+            let contentView = NSView(frame: NSRect(x: 0, y: 0, width: width, height: height))
+
             // 7. 多态图标微缩型自适应渲染
-            let iconImageView = NSImageView(frame: NSRect(x: 16, y: (height - 20) / 2, width: 20, height: 20))
+            let iconImageView = NSImageView(frame: NSRect(x: 18, y: (height - 20) / 2, width: 20, height: 20))
             let defaultIcon = isSuccess ? "checkmark.circle.fill" : "exclamationmark.triangle.fill"
             iconImageView.image = NSImage(systemSymbolName: iconName ?? defaultIcon, accessibilityDescription: nil)
             iconImageView.contentTintColor = isSuccess ? .systemGreen : .systemRed
             
             // 8. 紧凑型精细双行文字排版
             let titleLabel = NSTextField(labelWithString: title)
-            titleLabel.frame = NSRect(x: 46, y: 24, width: width - 46 - 16, height: 16)
+            titleLabel.frame = NSRect(x: 46, y: 24, width: width - 46 - 18, height: 16)
             titleLabel.font = .systemFont(ofSize: 12, weight: .bold)
             titleLabel.textColor = .labelColor
             titleLabel.backgroundColor = .clear
@@ -120,7 +111,7 @@ public final class SharedHUDManager {
             titleLabel.cell?.lineBreakMode = .byTruncatingTail
             
             let contentLabel = NSTextField(labelWithString: content)
-            contentLabel.frame = NSRect(x: 46, y: 8, width: width - 46 - 16, height: 14)
+            contentLabel.frame = NSRect(x: 46, y: 8, width: width - 46 - 18, height: 14)
             contentLabel.font = .systemFont(ofSize: 10, weight: .regular)
             contentLabel.textColor = .secondaryLabelColor
             contentLabel.backgroundColor = .clear
@@ -128,11 +119,17 @@ public final class SharedHUDManager {
             contentLabel.isEditable = false
             contentLabel.cell?.lineBreakMode = .byTruncatingTail
             
-            visualEffectView.addSubview(iconImageView)
-            visualEffectView.addSubview(titleLabel)
-            visualEffectView.addSubview(contentLabel)
-            
-            panel.contentView = visualEffectView
+            contentView.addSubview(iconImageView)
+            contentView.addSubview(titleLabel)
+            contentView.addSubview(contentLabel)
+
+            let backdrop = makeBackdrop(
+                size: NSSize(width: width, height: height),
+                isSuccess: isSuccess,
+                content: contentView
+            )
+            panel.hasShadow = isSuccess
+            panel.contentView = backdrop
 
             let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
 
@@ -142,7 +139,7 @@ public final class SharedHUDManager {
                 dismissPanel(panel, animated: !reduceMotion)
             }
             let clickRecognizer = HUDClickRecognizer(target: nil, action: nil, dismiss: dismiss)
-            visualEffectView.addGestureRecognizer(clickRecognizer)
+            contentView.addGestureRecognizer(clickRecognizer)
 
             activeKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                 if event.keyCode == 53 { // Esc
@@ -176,6 +173,44 @@ public final class SharedHUDManager {
                     scheduleAutomaticDismiss(panel, animated: true)
                 }
             })
+    }
+
+
+    @MainActor
+    private static func makeBackdrop(size: NSSize, isSuccess: Bool, content: NSView) -> NSView {
+        if !isSuccess, #available(macOS 26.0, *) {
+            let glass = NSGlassEffectView(frame: NSRect(origin: .zero, size: size))
+            glass.style = .regular
+            glass.cornerRadius = size.height / 2
+            glass.tintColor = NSColor.systemRed.withAlphaComponent(0.28)
+            glass.contentView = content
+            if #available(macOS 27.0, *) {
+                glass.effectIsInteractive = true
+            }
+            return glass
+        }
+        return makeFrostedBackdrop(size: size, content: content)
+    }
+
+    @MainActor
+    private static func makeFrostedBackdrop(size: NSSize, content: NSView) -> NSVisualEffectView {
+        let visualEffectView = NSVisualEffectView(frame: NSRect(origin: .zero, size: size))
+        visualEffectView.material = .hudWindow
+        visualEffectView.blendingMode = .behindWindow
+        visualEffectView.state = .active
+        visualEffectView.maskImage = roundedMask(size: size, radius: size.height / 2)
+        visualEffectView.addSubview(content)
+        return visualEffectView
+    }
+
+    private static func roundedMask(size: NSSize, radius: CGFloat) -> NSImage {
+        let image = NSImage(size: size, flipped: false) { rect in
+            NSBezierPath(roundedRect: rect, xRadius: radius, yRadius: radius).fill()
+            return true
+        }
+        image.capInsets = NSEdgeInsets(top: radius, left: radius, bottom: radius, right: radius)
+        image.resizingMode = .stretch
+        return image
     }
 
     @MainActor
