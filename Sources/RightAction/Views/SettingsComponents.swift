@@ -12,15 +12,19 @@ func openFinderExtensionSettings() {
     }
 }
 
-func makeRightClickMenuHealthSnapshot(
-    finderSyncControllerEnabled: Bool = FIFinderSyncController.isExtensionEnabled
-) -> RightClickMenuHealthSnapshot {
+private func queryRightClickFinderExtensionRegistrationState() -> FinderExtensionRegistrationState {
     let query = SystemReloader.queryFinderExtension(bundleIdentifier: rightClickFinderExtensionBundleIdentifier)
-    let pluginKitState = FinderExtensionDiagnostics.registrationState(
+    return FinderExtensionDiagnostics.registrationState(
         pluginKitOutput: query.standardOutput,
         commandSucceeded: query.isSuccess,
         bundleIdentifier: rightClickFinderExtensionBundleIdentifier
     )
+}
+
+func makeRightClickMenuHealthSnapshot(
+    finderSyncControllerEnabled: Bool = FIFinderSyncController.isExtensionEnabled
+) -> RightClickMenuHealthSnapshot {
+    let pluginKitState = queryRightClickFinderExtensionRegistrationState()
     let storage = SharedStorageManager.shared
     let heartbeatState = ExtensionHeartbeatStore(
         fileURL: storage.extensionHeartbeatURL
@@ -171,7 +175,16 @@ struct ExtensionRegistrationBox: View {
     }
 
     private func refresh() {
-        isExtensionEnabled = FIFinderSyncController.isExtensionEnabled
+        let controllerEnabled = FIFinderSyncController.isExtensionEnabled
+        DispatchQueue.global(qos: .userInitiated).async {
+            let enabled = FinderExtensionDiagnostics.isExtensionEnabled(
+                registrationState: queryRightClickFinderExtensionRegistrationState(),
+                controllerEnabled: controllerEnabled
+            )
+            DispatchQueue.main.async {
+                isExtensionEnabled = enabled
+            }
+        }
     }
 
     private var registrationButton: some View {

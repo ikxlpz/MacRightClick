@@ -46,14 +46,11 @@ public struct RightClickMenuHealthSnapshot: Equatable, Sendable {
     public let recommendedRepairAction: RecommendedRepairAction
 
     public var menuServiceLevel: RightClickMenuServiceLevel {
-        if !finderSyncControllerEnabled {
+        if !FinderExtensionDiagnostics.isExtensionEnabled(
+            registrationState: finderExtensionState,
+            controllerEnabled: finderSyncControllerEnabled
+        ) {
             return .unavailable
-        }
-        switch finderExtensionState {
-        case .notRegistered, .registeredButNotEnabled:
-            return .unavailable
-        case .enabled, .unknown:
-            break
         }
         switch heartbeatState {
         case .recent(let observedPathCount):
@@ -156,6 +153,19 @@ private extension RecommendedRepairAction {
 public enum FinderExtensionDiagnostics {
     public static let defaultExtensionBundleIdentifier = "ikxlpz.RightAction.Extension"
 
+    /// 明确的注册状态优先；系统控制器查询可能在扩展已运行时仍返回 false。
+    /// 保留原始控制器值用于诊断，仅在注册查询失败时用它兜底。
+    public static func isExtensionEnabled(
+        registrationState: FinderExtensionRegistrationState,
+        controllerEnabled: Bool
+    ) -> Bool {
+        switch registrationState {
+        case .enabled: return true
+        case .registeredButNotEnabled, .notRegistered: return false
+        case .unknown: return controllerEnabled
+        }
+    }
+
     public static func registrationState(
         pluginKitOutput: String,
         commandSucceeded: Bool,
@@ -254,7 +264,10 @@ public enum FinderExtensionDiagnostics {
             break
         }
 
-        if !finderSyncControllerEnabled {
+        if !isExtensionEnabled(
+            registrationState: finderExtensionState,
+            controllerEnabled: finderSyncControllerEnabled
+        ) {
             return .restartFinder
         }
         switch heartbeatState {

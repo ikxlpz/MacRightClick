@@ -64,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
         let contentView = ContentView()
         
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 850, height: 600),
+            contentRect: NSRect(x: 0, y: 0, width: 780, height: 600),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered,
             defer: false
@@ -79,10 +79,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
         window.center()
         window.setFrameAutosaveName("MainWindow")
         window.contentView = NSHostingView(rootView: contentView)
+        window.contentMinSize = NSSize(width: 760, height: 560)
+        window.contentMaxSize = NSSize(width: 820, height: 640)
+        window.collectionBehavior = .fullScreenNone
+        // 同时收紧旧版本自动恢复的窗口尺寸。
+        let restoredSize = window.contentView!.frame.size
+        window.setContentSize(NSSize(
+            width: min(max(restoredSize.width, window.contentMinSize.width), window.contentMaxSize.width),
+            height: min(max(restoredSize.height, window.contentMinSize.height), window.contentMaxSize.height)
+        ))
         window.orderOut(nil) // 【关键体验优化】：确保主设置窗口初始状态绝对不可见
         
         // 主程序默认保持安静的菜单栏形态；是否展示设置页由启动来源决定。
         NSApp.setActivationPolicy(.accessory)
+        setupApplicationMenu()
         setupStatusItem()
         showSettingsWindowIfNeededForLaunch()
         handlePermissionRefreshLaunchIfNeeded()
@@ -203,6 +213,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
         }
     }
     
+    private func setupApplicationMenu() {
+        // 托盘菜单的快捷键只在菜单打开时生效；主菜单让设置窗口也能响应 ⌘Q。
+        let mainMenu = NSMenu()
+        let appMenuItem = mainMenu.addItem(withTitle: "RightAction", action: nil, keyEquivalent: "")
+        let appMenu = NSMenu(title: "RightAction")
+        let quitItem = appMenu.addItem(withTitle: "退出 RightAction", action: #selector(terminateApp), keyEquivalent: "q")
+        quitItem.keyEquivalentModifierMask = .command
+        quitItem.target = self
+        appMenuItem.submenu = appMenu
+        NSApp.mainMenu = mainMenu
+    }
+
     // MARK: - 系统菜单栏托盘管理
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)

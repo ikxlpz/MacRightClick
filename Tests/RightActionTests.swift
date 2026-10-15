@@ -900,7 +900,7 @@ final class RightActionTests: XCTestCase {
             pendingActionCount: 0,
             failedActionCount: 0
         )
-        let needsFinderRestart = FinderExtensionDiagnostics.makeSnapshot(
+        let controllerQueryDisagrees = FinderExtensionDiagnostics.makeSnapshot(
             fullDiskAccessGranted: true,
             finderSyncControllerEnabled: false,
             pluginKitState: .enabled,
@@ -921,7 +921,7 @@ final class RightActionTests: XCTestCase {
 
         XCTAssertEqual(denied.recommendedRepairAction, .openFullDiskAccessSettings)
         XCTAssertEqual(unregistered.recommendedRepairAction, .registerExtension)
-        XCTAssertEqual(needsFinderRestart.recommendedRepairAction, .restartFinder)
+        XCTAssertEqual(controllerQueryDisagrees.recommendedRepairAction, .none)
         XCTAssertEqual(healthy.recommendedRepairAction, .none)
     }
 
@@ -935,7 +935,7 @@ final class RightActionTests: XCTestCase {
             pendingActionCount: 0,
             failedActionCount: 0
         )
-        let enabledButNeedsFinderRestartAndDenied = FinderExtensionDiagnostics.makeSnapshot(
+        let enabledButControllerQueryDisagreesAndDenied = FinderExtensionDiagnostics.makeSnapshot(
             fullDiskAccessGranted: false,
             finderSyncControllerEnabled: false,
             pluginKitState: .enabled,
@@ -946,7 +946,50 @@ final class RightActionTests: XCTestCase {
         )
 
         XCTAssertEqual(unregisteredAndDenied.recommendedRepairAction, .registerExtension)
-        XCTAssertEqual(enabledButNeedsFinderRestartAndDenied.recommendedRepairAction, .restartFinder)
+        XCTAssertEqual(enabledButControllerQueryDisagreesAndDenied.recommendedRepairAction, .openFullDiskAccessSettings)
+    }
+
+    func testExtensionEnablementUsesRegistrationWithControllerFallback() {
+        for controllerEnabled in [false, true] {
+            XCTAssertTrue(FinderExtensionDiagnostics.isExtensionEnabled(
+                registrationState: .enabled, controllerEnabled: controllerEnabled
+            ))
+            for registrationState: FinderExtensionRegistrationState in [.notRegistered, .registeredButNotEnabled] {
+                let snapshot = FinderExtensionDiagnostics.makeSnapshot(
+                    fullDiskAccessGranted: true,
+                    finderSyncControllerEnabled: controllerEnabled,
+                    pluginKitState: registrationState,
+                    heartbeatState: .recent(observedPathCount: 13),
+                    watchScope: .everywhere,
+                    pendingActionCount: 0,
+                    oldestPendingAge: nil,
+                    failedActionCount: 0
+                )
+                XCTAssertEqual(snapshot.menuServiceLevel, .unavailable)
+                XCTAssertEqual(snapshot.recommendedRepairAction, .registerExtension)
+            }
+            XCTAssertEqual(FinderExtensionDiagnostics.isExtensionEnabled(
+                registrationState: .unknown, controllerEnabled: controllerEnabled
+            ), controllerEnabled)
+        }
+    }
+
+    func testEnabledRegistrationAndHeartbeatOverrideFalseControllerQuery() {
+        let snapshot = FinderExtensionDiagnostics.makeSnapshot(
+            fullDiskAccessGranted: true,
+            finderSyncControllerEnabled: false,
+            pluginKitState: .enabled,
+            heartbeatState: .recent(observedPathCount: 13),
+            watchScope: .everywhere,
+            pendingActionCount: 0,
+            oldestPendingAge: nil,
+            failedActionCount: 0
+        )
+
+        XCTAssertEqual(snapshot.menuServiceLevel, .healthy)
+        XCTAssertEqual(snapshot.healthLevel, .healthy)
+        XCTAssertEqual(snapshot.recommendedRepairAction, .none)
+        XCTAssertFalse(snapshot.finderSyncControllerEnabled)
     }
 
     func testFDAIsWarningWhenFinderMenuIsHealthy() {
@@ -969,7 +1012,7 @@ final class RightActionTests: XCTestCase {
     func testMissingHeartbeatMakesMenuUnverified() {
         let snapshot = FinderExtensionDiagnostics.makeSnapshot(
             fullDiskAccessGranted: true,
-            finderSyncControllerEnabled: true,
+            finderSyncControllerEnabled: false,
             pluginKitState: .enabled,
             heartbeatState: .missing,
             watchScope: .everywhere,

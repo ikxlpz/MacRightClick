@@ -4,7 +4,6 @@ enum ActionStatusFilter: String, CaseIterable, Identifiable {
     case all
     case enabled
     case favorites
-    case unavailable
 
     var id: String { rawValue }
 
@@ -13,7 +12,6 @@ enum ActionStatusFilter: String, CaseIterable, Identifiable {
         case .all: return "全部状态"
         case .enabled: return "已启用"
         case .favorites: return "已收藏"
-        case .unavailable: return "应用未安装"
         }
     }
 }
@@ -40,6 +38,12 @@ struct ActionsHubView: View {
 
     var body: some View {
         Form {
+            Section {
+                TextField("搜索动作名称或 ID", text: $query)
+                    .textFieldStyle(.plain)
+                    .accessibilityLabel("搜索动作名称或 ID")
+            }
+
             Section("配置档案") {
                 Picker("动作档案", selection: Binding(
                     get: { selectedProfile },
@@ -107,7 +111,6 @@ struct ActionsHubView: View {
         }
         .formStyle(.grouped)
         .id(refreshID)
-        .searchable(text: $query, prompt: "搜索动作名称或 ID")
         .confirmationDialog(
             profileConfirmationTitle,
             isPresented: Binding(
@@ -143,9 +146,6 @@ struct ActionsHubView: View {
                 return SharedStorageManager.shared.isActionEnabled(action)
             case .favorites:
                 return favoriteIDs.contains(action.actionId)
-            case .unavailable:
-                guard let bundleID = action.associatedBundleIdentifier else { return false }
-                return !InstalledAppRegistry.shared.isInstalled(bundleID)
             }
         }
     }
@@ -236,18 +236,9 @@ struct ActionRowView: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: action.iconName ?? "gearshape")
-                .foregroundStyle(.secondary)
-                .frame(width: 20, height: 20)
-
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 8) {
                     Text(action.localizedTitle)
-                    if isApplicationUnavailable {
-                        Label("未安装", systemImage: "exclamationmark.circle")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
                     if action.isHighRisk {
                         Label("高级", systemImage: "exclamationmark.triangle")
                             .font(.caption)
@@ -286,11 +277,6 @@ struct ActionRowView: View {
         }
         .padding(.vertical, 5)
         .onAppear(perform: loadState)
-    }
-
-    private var isApplicationUnavailable: Bool {
-        guard let bundleID = action.associatedBundleIdentifier else { return false }
-        return !InstalledAppRegistry.shared.isInstalled(bundleID)
     }
 
     private func loadState() {
