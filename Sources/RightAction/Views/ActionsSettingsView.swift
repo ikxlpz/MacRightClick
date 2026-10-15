@@ -99,7 +99,7 @@ struct ActionsHubView: View {
                     if !actions.isEmpty {
                         Section(category.localizedName) {
                             ForEach(actions, id: \.actionId) { action in
-                                ActionRowView(action: action) {
+                                ActionRowView(action: action, refreshToken: refreshID) {
                                     selectedProfile = SharedStorageManager.shared.actionProfile
                                     refreshID = UUID()
                                 }
@@ -110,7 +110,6 @@ struct ActionsHubView: View {
             }
         }
         .formStyle(.grouped)
-        .id(refreshID)
         .confirmationDialog(
             profileConfirmationTitle,
             isPresented: Binding(
@@ -228,6 +227,7 @@ struct ActionListGroupView: View {
 
 struct ActionRowView: View {
     let action: MenuAction
+    var refreshToken: UUID? = nil
     var showsIdentifier = false
     var onConfigurationChanged: () -> Void = {}
 
@@ -277,6 +277,9 @@ struct ActionRowView: View {
         }
         .padding(.vertical, 5)
         .onAppear(perform: loadState)
+        .onChange(of: refreshToken) { _ in
+            loadState()
+        }
     }
 
     private func loadState() {

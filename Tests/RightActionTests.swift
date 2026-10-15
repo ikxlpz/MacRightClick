@@ -55,6 +55,11 @@ final class RightActionTests: XCTestCase {
         XCTAssertEqual(action.associatedBundleIdentifier, "com.microsoft.VSCode")
     }
 
+    func testTerminalEditorBundleIdentifiersMatchCurrentApps() {
+        XCTAssertEqual(TerminalEditorType.sublime.bundleIdentifier, "com.sublimetext.4")
+        XCTAssertEqual(TerminalEditorType.cursor.bundleIdentifier, "com.todesktop.230313mzl4w4u92")
+    }
+
     func testEssentialProfileNeverChangesHighRiskActions() {
         let actions = DefaultActionRegistry.makeActions()
         let states = ActionProfile.essential.states(for: actions)

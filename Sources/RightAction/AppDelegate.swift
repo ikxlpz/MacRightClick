@@ -3,6 +3,9 @@ import SwiftUI
 import os.lock
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDelegate {
+
+    private static let minimumWindowSize = NSSize(width: 760, height: 560)
+    private static let maximumWindowSize = NSSize(width: 820, height: 640)
     
     fileprivate static var instance: AppDelegate?
 
@@ -65,7 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
         
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 780, height: 600),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
         )
@@ -73,21 +76,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
         window.delegate = self // 【关键修复】：指定 Window 代理，使 windowShouldClose 方法能被正确触发
         window.title = "RightAction"
         window.titleVisibility = .visible
-        window.titlebarAppearsTransparent = true
-        window.titlebarSeparatorStyle = .none
+        window.titlebarAppearsTransparent = false
         window.toolbarStyle = .unified
         window.center()
         window.setFrameAutosaveName("MainWindow")
         window.contentView = NSHostingView(rootView: contentView)
-        window.contentMinSize = NSSize(width: 760, height: 560)
-        window.contentMaxSize = NSSize(width: 820, height: 640)
+        window.minSize = Self.minimumWindowSize
+        window.maxSize = Self.maximumWindowSize
         window.collectionBehavior = .fullScreenNone
         // 同时收紧旧版本自动恢复的窗口尺寸。
-        let restoredSize = window.contentView!.frame.size
-        window.setContentSize(NSSize(
-            width: min(max(restoredSize.width, window.contentMinSize.width), window.contentMaxSize.width),
-            height: min(max(restoredSize.height, window.contentMinSize.height), window.contentMaxSize.height)
-        ))
+        var restoredFrame = window.frame
+        restoredFrame.size.width = min(
+            max(restoredFrame.size.width, Self.minimumWindowSize.width),
+            Self.maximumWindowSize.width
+        )
+        restoredFrame.size.height = min(
+            max(restoredFrame.size.height, Self.minimumWindowSize.height),
+            Self.maximumWindowSize.height
+        )
+        window.setFrame(restoredFrame, display: false)
         window.orderOut(nil) // 【关键体验优化】：确保主设置窗口初始状态绝对不可见
         
         // 主程序默认保持安静的菜单栏形态；是否展示设置页由启动来源决定。
@@ -413,6 +420,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMenuDele
     }
     
     // MARK: - NSWindowDelegate (常驻后台静默运行生命周期拦截)
+    func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
+        NSSize(
+            width: min(
+                max(frameSize.width, Self.minimumWindowSize.width),
+                Self.maximumWindowSize.width
+            ),
+            height: min(
+                max(frameSize.height, Self.minimumWindowSize.height),
+                Self.maximumWindowSize.height
+            )
+        )
+    }
+
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         // 1. 物理隐藏偏好设置窗口，避免被彻底销毁
         window.orderOut(nil)

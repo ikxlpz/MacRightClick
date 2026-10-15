@@ -17,8 +17,8 @@ public enum TerminalEditorType: String, Codable, CaseIterable, Sendable {
         case .iterm2: return "com.googlecode.iterm2"
         case .warp: return "dev.warp.Warp-Stable"
         case .vscode: return "com.microsoft.VSCode"
-        case .sublime: return "com.sublimetext.3" // 支持 Sublime Text 3/4
-        case .cursor: return "com.todesktop.230313mptvbe7of" // Cursor's custom bundle ID
+        case .sublime: return "com.sublimetext.4"
+        case .cursor: return "com.todesktop.230313mzl4w4u92"
         case .otty: return "io.appmakes.otty"
         }
     }

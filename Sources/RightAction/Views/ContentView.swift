@@ -47,7 +47,7 @@ public struct ContentView: View {
             }
         }
         .systemTabBar()
-        .frame(minWidth: 760, minHeight: 560)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     @ViewBuilder
